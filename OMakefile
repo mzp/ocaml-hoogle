@@ -151,6 +151,7 @@ BYTE_ENABLED = true
 FILES[] =
     list2
     searchid
+    base
 
 PROGRAM = ooogle
 
