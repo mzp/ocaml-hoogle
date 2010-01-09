@@ -34,13 +34,15 @@ let to_result (id, kind) =
       type_   = "<not yet>"
     }
 
-let search_type s =
+let lift f s =
   s
-  +> sure (Searchid.search_string_type ~mode:`Included)
+  +> sure f
   +> List.map ~f:to_result
 
 let search s =
-  search_type s
+  lift (Searchid.search_string_type ~mode:`Included) s
+  @ lift Searchid.search_string_symbol s
+  @ lift Searchid.search_pattern_symbol s
 
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
