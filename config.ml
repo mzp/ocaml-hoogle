@@ -43,3 +43,11 @@ let read path =
   with End_of_file ->
     add_current ();
     !configs
+
+let find_package module_ configs =
+  let config =
+    List.find
+      (fun { modules=modules } -> List.mem module_  modules)
+      configs
+  in
+    config.name

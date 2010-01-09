@@ -8,6 +8,13 @@ type t = {
   type_  : string;
 }
 
+let init configs =
+  (* initialize *)
+  Toploop.set_paths ();
+  Searchid.module_list :=
+    HList.concat_map (fun s -> s.Config.modules) configs
+  @ !Searchid.module_list
+
 let sure f x =
   try
     f x
@@ -25,8 +32,13 @@ let string_of_sign sign =
     Format.pp_print_flush ppf ();
     Buffer.contents b
 
+let find_package id configs =
+  try
+    Config.find_package (List.hd id) configs
+  with _ ->
+    "<unknown package>"
 
-let to_result (id, kind) =
+let to_result configs (id, kind) =
   let id' =
     Longident.flatten id
   in
@@ -44,7 +56,7 @@ let to_result (id, kind) =
 	  {
 	    module_ = String.concat ~sep:"." @@ HList.init id';
 	    name    = HList.last id';
-	    package = "<not yet>";
+	    package = find_package id' configs;
 	    type_   = Str.replace_first (Str.regexp "^[^:]*:") ""
 	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
 	  }
@@ -52,16 +64,17 @@ let to_result (id, kind) =
 	  {
 	    module_ = String.concat ~sep:"." @@ HList.init id';
 	    name    = HList.last id';
-	    package = "<not yet>";
+	    package = find_package id' configs;
 	    type_   = "<not yet>"
 	  }
 
-let lift f s =
+let lift f configs s =
   s
   +> sure f
-  +> List.map ~f:to_result
+  +> List.map ~f:(to_result configs)
 
-let search s =
-  lift (Searchid.search_string_type ~mode:`Included) s
-  @ lift Searchid.search_string_symbol s
-  @ lift Searchid.search_pattern_symbol s
+let search s configs =
+  init configs;
+  lift (Searchid.search_string_type ~mode:`Included) configs s
+  @ lift Searchid.search_string_symbol  configs s
+  @ lift Searchid.search_pattern_symbol configs s

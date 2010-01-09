@@ -5,4 +5,5 @@ type t = {
   type_  : string;
 }
 
-val search : string -> t list
+val search : string -> Config.t list -> t list
+
