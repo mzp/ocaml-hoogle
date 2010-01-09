@@ -25,12 +25,21 @@ let _ =
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
 
+let search_page (cgi : cgi) =
+  let t =
+    template "templates/search.html"
+  in
+    t#set "query" @@ cgi#param "q";
+    cgi#template t
+
 let _ =
   register_script begin fun req ->
     let q =
       new cgi req
     in
       q#header ~content_type:"text/html; charset=utf-8" ();
-      index_page q
+      if q#param_exists "q" then
+	search_page q
+      else
+	index_page q
   end
-
