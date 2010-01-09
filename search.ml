@@ -9,7 +9,7 @@ let _ =
 type t = {
   module_: string;
   package : string;
-  name   : string;
+  name : string;
   type_  : string;
 }
 
@@ -19,16 +19,47 @@ let sure f x =
   with Searchid.Error _ ->
     []
 
+let string_of_sign sign =
+  let b =
+    Buffer.create 10
+  in
+  let ppf =
+    Format.formatter_of_buffer b
+  in
+    Printtyp.signature ppf sign;
+    Format.pp_print_flush ppf ();
+    Buffer.contents b
+
+
 let to_result (id, kind) =
   let id' =
     Longident.flatten id
   in
-    {
-      module_ = String.concat ~sep:"." @@ HList.init id';
-      name    = HList.last id';
-      package = "<not yet>";
-      type_   = "<not yet>"
-    }
+  let name =
+    match id with
+	Longident.Lident x -> x
+      | Longident.Ldot (_, x) -> x
+      | _ -> match kind with Searchid.Pvalue | Searchid.Ptype | Searchid.Plabel -> "z" | _ -> "Z"
+  in
+    match kind with
+	Searchid.Pvalue ->
+	  let _, vd =
+	    Env.lookup_value id !Searchid.start_env
+	  in
+	  {
+	    module_ = String.concat ~sep:"." @@ HList.init id';
+	    name    = HList.last id';
+	    package = "<not yet>";
+	    type_   = Str.replace_first (Str.regexp "^val[^:]*:") ""
+	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
+	  }
+      | _ ->
+	  {
+	    module_ = String.concat ~sep:"." @@ HList.init id';
+	    name    = HList.last id';
+	    package = "<not yet>";
+	    type_   = "<not yet>"
+	  }
 
 let lift f s =
   s
