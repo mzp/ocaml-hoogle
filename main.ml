@@ -8,13 +8,13 @@ open CamlGI.Template
 let _ =
   (* initialize *)
   Toploop.set_paths ();
-  Searchid.module_list := "String"::!Searchid.module_list
+  Searchid.module_list := "String"::"Pervasives"::!Searchid.module_list
 
 type t = {
   module_: string;
   package : string;
   name   : string;
-  type_  : string
+  type_  : string;
 }
 
 let sure f x =
