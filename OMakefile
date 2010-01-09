@@ -16,6 +16,7 @@ NATIVE_ENABLED = false
 BYTE_ENABLED = true
 
 FILES[] =
+    hList
     list2
     searchid
     base
