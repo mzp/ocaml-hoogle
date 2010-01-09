@@ -17,18 +17,30 @@ type t = {
   type_  : string
 }
 
+let sure f x =
+  try
+    f x
+  with Searchid.Error _ ->
+    []
+
+let to_result (id, kind) =
+  let id' =
+    Longident.flatten id
+  in
+    {
+      module_ = String.concat ~sep:"." @@ HList.init id';
+      name    = HList.last id';
+      package = "<not yet>";
+      type_   = "<not yet>"
+    }
+
+let search_type s =
+  s
+  +> sure (Searchid.search_string_type ~mode:`Included)
+  +> List.map ~f:to_result
+
 let search s =
-  List.map (Searchid.search_string_type s `Included) ~f:begin fun (id, kind) ->
-    let id' =
-      Longident.flatten id
-    in
-      {
-	module_ = String.concat ~sep:"." @@ HList.init id';
-	name    = HList.last id';
-	package = "<not yet>";
-	type_   = "<not yet>"
-      }
-  end
+  search_type s
 
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
