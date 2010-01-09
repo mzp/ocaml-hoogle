@@ -19,6 +19,7 @@
     </p>
   </form>
   <table>
+::if(found)::
   ::table(result)::
   <tr>
     <td>
@@ -31,6 +32,9 @@
     </td>
   </tr>
   ::end::
+::else::
+  <p>no such result</p>
+::end::
   </table>
 </body>
 </html>

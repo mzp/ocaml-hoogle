@@ -52,11 +52,15 @@ let search_page (cgi : cgi) =
      "type"   , Template.VarString t.type_;
      "package", Template.VarString t.package]
   in
+  let result =
+    search @@ cgi#param "q"
+  in
   let t =
     template "templates/search.html"
   in
     t#set "query" @@ cgi#param "q";
-    t#table "result" @@ List.map ~f:to_table @@ search @@ cgi#param "q";
+    t#conditional "found" @@ (result <> []);
+    t#table "result" @@ List.map ~f:to_table result;
     cgi#template t
 
 let _ =
