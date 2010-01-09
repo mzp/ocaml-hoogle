@@ -30,6 +30,9 @@ OCAML_OTHER_LIBS += toplevellib
 #
 .DEFAULT: $(OCamlProgram $(PROGRAM), $(FILES))
 
+.PHONY: clean
+clean:
+	rm -f *.cm[oix] *.o *.omc  $(PROGRAM) *.run *~ *.annot
 
 ########################################################################
 # Permission is hereby granted, free of charge, to any person
