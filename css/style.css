@@ -71,6 +71,10 @@ td {
 td.where{
 	text-align:right;
 	padding-right:5px;
+	width:150px;
+}
+td.entry{
+	width:650px;
 }
 .module {
 	color:#008C00;
