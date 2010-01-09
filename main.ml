@@ -6,6 +6,16 @@ open CamlGI.Template
 
 open Search
 
+let init () =
+  (* initialize *)
+  let modules =
+    Config.read "modules.txt"
+  in
+    Toploop.set_paths ();
+    Searchid.module_list :=
+      HList.concat_map (fun s -> s.Config.modules) modules
+    @ !Searchid.module_list
+
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
 
@@ -17,6 +27,7 @@ let search_page (cgi : cgi) =
      "package", Template.VarString t.package]
   in
   let result =
+    init ();
     Search.search @@ cgi#param "q"
   in
   let t =

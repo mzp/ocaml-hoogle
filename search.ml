@@ -1,11 +1,6 @@
 open Base
 open StdLabels
 
-let _ =
-  (* initialize *)
-  Toploop.set_paths ();
-  Searchid.module_list := "String"::"Pervasives"::!Searchid.module_list
-
 type t = {
   module_: string;
   package : string;
@@ -50,7 +45,7 @@ let to_result (id, kind) =
 	    module_ = String.concat ~sep:"." @@ HList.init id';
 	    name    = HList.last id';
 	    package = "<not yet>";
-	    type_   = Str.replace_first (Str.regexp "^val[^:]*:") ""
+	    type_   = Str.replace_first (Str.regexp "^[^:]*:") ""
 	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
 	  }
       | _ ->
