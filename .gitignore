@@ -3,7 +3,7 @@
 .omakedb.lock
 *.cm[iox]
 *.omc
-ooogle
+*.cgi
 *.run
 *.annot
 *.o
