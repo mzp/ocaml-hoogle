@@ -21,7 +21,7 @@ FILES[] =
     base
     main
 
-PROGRAM = ooogle
+PROGRAM = index.cgi
 
 # OCAML_LIBS +=
 # OCAML_CLIBS +=
