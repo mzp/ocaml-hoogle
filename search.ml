@@ -128,6 +128,10 @@ let to_result configs (id, kind) =
 	  { t with desc = Module }
       | Searchid.Pmodtype ->
 	  { t with desc = ModuleType }
+      | Searchid.Pclass ->
+	  { t with desc = Class }
+      | Searchid.Pcltype ->
+	  { t with desc = ClassType }
       | _ ->
 	  t
 

@@ -22,13 +22,17 @@ let search_page (cgi : cgi) =
 	    "module",[]
 	| ModuleType ->
 	    "sig",[]
+	| Class ->
+	    "class",[]
+	| ClassType ->
+	    "class_type",[]
 	| _ ->
 	    "", []
     in
       ["module" , Template.VarString t.module_;
        "name"   , Template.VarString t.name;
        "package", Template.VarString t.package]
-      @ List.map  ["value"; "type"; "module"; "sig"]
+      @ List.map  ["value"; "type"; "module"; "sig"; "class"; "class_type"]
 	~f:(fun x -> ("is_" ^ x,Template.VarConditional (x = kind)))
       @ opt
   in
