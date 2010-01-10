@@ -19,12 +19,5 @@ let _ = begin "config.ml" >::: [
     ]  @@
       Config.read "config-test.txt"
   end;
-  "find package" >:: begin fun () ->
-    assert_equal "other package" @@
-      find_package "C" [
-	{ name = "some package"; modules = ["A"; "B"]};
-	{ name = "other package"; modules = ["C"]};
-      ]
-  end
 ] end +> run_test_tt_main
 
