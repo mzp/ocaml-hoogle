@@ -1,4 +1,4 @@
-type desc =
+type kind =
     Value of string
   | Type of string
   | Module
@@ -8,10 +8,9 @@ type desc =
   | Other
 
 type t = {
-  module_ : string;
-  package : string;
+  module_ : string list;
   name    : string;
-  desc    : desc
+  kind    : kind
 }
 
-val search : string -> Config.t list -> t list
+val search : string -> string list -> t list

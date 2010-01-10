@@ -2,6 +2,7 @@ USE_OCAMLFIND = true
 
 OCAMLPACKS[] =
     oUnit
+    extlib
     CamlGI
     str
 
@@ -64,7 +65,7 @@ OUNIT_LIBS[] =
 	hList
 
 OUnitTest(config, config)
-#OUnitTest(search, seach)
+OUnitTest(search, search config searchid list2)
 
 ########################################################################
 # Permission is hereby granted, free of charge, to any person

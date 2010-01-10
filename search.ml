@@ -2,7 +2,7 @@ open Base
 open StdLabels
 open Types
 
-type desc =
+type kind =
     Value of string
   | Type of string
   | Module
@@ -12,18 +12,18 @@ type desc =
   | Other
 
 type t = {
-  module_ : string;
-  package : string;
+  module_ : string list;
   name    : string;
-  desc    : desc
+  kind    : kind
 }
 
-let init configs =
+let init_modules =
+  !Searchid.module_list
+
+let init modules =
   (* initialize *)
   Toploop.set_paths ();
-  Searchid.module_list :=
-    HList.concat_map (fun s -> s.Config.modules) configs
-  @ !Searchid.module_list
+  Searchid.module_list := modules @ init_modules
 
 let sure f x =
   try
@@ -42,12 +42,6 @@ let string_of_sign sign =
     Format.pp_print_flush ppf ();
     Buffer.contents b
 
-let find_package id configs =
-  try
-    Config.find_package (List.hd id) configs
-  with _ ->
-    "<unknown package>"
-
 let string_of_value id =
   let name =
     match id with
@@ -59,7 +53,7 @@ let string_of_value id =
     Env.lookup_value id !Searchid.start_env
   in
     Str.replace_first (Str.regexp "=[^=]*$") "" @@
-      Str.replace_first (Str.regexp "^[^:]*:") ""
+      Str.replace_first (Str.regexp "^[^:]*: *") ""
       (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
 
 let ident_of_path ~default = function
@@ -79,7 +73,7 @@ let string_of_type_decl path =
 	    raise Not_found
 	| Some ty ->
 	    match Ctype.repr ty with
-		{ Types.desc = Tobject _} ->
+		{ desc = Tobject _} ->
 		  let
 		      clt = Env.find_cltype path !Searchid.start_env
 		  in
@@ -94,7 +88,7 @@ let string_of_type_decl path =
 let string_of_type id =
   let strip s =
     if String.contains s '=' then
-      Str.replace_first (Str.regexp "^[^=]*=") "" s
+      Str.replace_first (Str.regexp "^[^=]*= *") "" s
     else
       ""
   in
@@ -109,47 +103,47 @@ let infix s =
   else
     s
 
-let to_result configs (id, kind) =
+let to_result (id, kind) =
   let id' =
     Longident.flatten id
   in
   let module_ xs =
     match xs with
-	[]  -> ""
-      | [x] -> x
-      |  _  -> String.concat ~sep:"." @@ HList.init xs
+	[]  -> []
+      | [x] -> [x]
+      |  _  -> HList.init xs
   in
   let t =
     {
       module_ = module_ id';
       name    = HList.last id';
-      package = find_package id' configs;
-      desc = Other
+      kind = Other
     }
   in
     match kind with
 	Searchid.Pvalue ->
-	  { t with desc = Value (string_of_value id); name = infix t.name}
+	  { t with kind = Value (string_of_value id); name = infix t.name}
       | Searchid.Ptype ->
-	  { t with desc = Type (string_of_type id) }
+	  { t with kind = Type (string_of_type id) }
       | Searchid.Pmodule ->
-	  { t with desc = Module }
+	  { t with kind = Module }
       | Searchid.Pmodtype ->
-	  { t with desc = ModuleType }
+	  { t with kind = ModuleType }
       | Searchid.Pclass ->
-	  { t with desc = Class }
+	  { t with kind = Class }
       | Searchid.Pcltype ->
-	  { t with desc = ClassType }
+	  { t with kind = ClassType }
       | _ ->
 	  t
 
-let lift f configs s =
+let lift f s =
   s
   +> sure f
-  +> List.map ~f:(to_result configs)
+  +> List.map ~f:to_result
 
-let search s configs =
-  init configs;
-  lift (Searchid.search_string_type ~mode:`Included) configs s
-  @ lift Searchid.search_string_symbol  configs s
-  @ lift Searchid.search_pattern_symbol configs s
+let search s modules =
+  init modules;
+  lift (Searchid.search_string_type ~mode:`Included) s
+  @ lift Searchid.search_string_symbol  s
+  @ lift Searchid.search_pattern_symbol s
+
