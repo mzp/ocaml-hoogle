@@ -1,6 +1,7 @@
 USE_OCAMLFIND = true
 
 OCAMLPACKS[] =
+    oUnit
     CamlGI
     str
 
@@ -37,6 +38,26 @@ OCAML_OTHER_LIBS += toplevellib
 .PHONY: clean
 clean:
 	rm -f *.cm[oix] *.o *.omc  $(PROGRAM) *.run *~ *.annot
+
+# test
+public.OUnitTest(name,files) =
+	protected.test_file = $(addsuffix Test,$(name))
+	protected.target    = $(addsuffix -runner,$(test_file))
+	protected.src_files = $(addprefix $(OUNIT_SRC_DIR),$(files))
+
+	.PHONY: check check-$(name) clean check-detail-$(name) check-detail
+	OCamlProgram($(target), $(test_file) $(src_files) $(OUNIT_LIBS))
+
+	check-$(name): $(target)
+		$(addprefix ./,$(target))
+
+	check-detail-$(name): $(target)
+		($(addprefix ./,$(target)) -verbose ; true) | tee -a $(ROOT)/unittest.log
+
+	check: check-$(name)
+	check-detail: check-detail-$(name)
+
+	export
 
 ########################################################################
 # Permission is hereby granted, free of charge, to any person
