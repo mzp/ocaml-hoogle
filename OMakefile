@@ -20,6 +20,7 @@ BYTE_ENABLED = true
 
 FILES[] =
     config
+    controller
     hList
     list2
     searchid
@@ -66,6 +67,7 @@ OUNIT_LIBS[] =
 
 OUnitTest(config, config)
 OUnitTest(search, search config searchid list2)
+OUnitTest(controller, controller)
 
 ########################################################################
 # Permission is hereby granted, free of charge, to any person
