@@ -17,12 +17,13 @@ let chop s =
 
 let add_current () =
   if !name <> "" then
-    configs := { name = !name; modules = !modules } :: !configs;
-  name := ""
+    configs := { name = !name; modules = List.rev !modules } :: !configs;
+  name := "";
+  modules := []
 
 let parse_line s =
   let r =
-    regexp "- *\\(.*\\)"
+    regexp "^- *\\(.*\\)$"
   in
     if string_match r s 0 then begin
       add_current ();
@@ -42,7 +43,7 @@ let read path =
     failwith "must not happen"
   with End_of_file ->
     add_current ();
-    !configs
+    List.rev !configs
 
 let find_package module_ configs =
   let config =
