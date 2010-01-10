@@ -58,7 +58,8 @@ let string_of_value id =
   let _, vd =
     Env.lookup_value id !Searchid.start_env
   in
-    Str.replace_first (Str.regexp "^[^:]*:") ""
+    Str.replace_first (Str.regexp "=[^=]*$") "" @@
+      Str.replace_first (Str.regexp "^[^:]*:") ""
       (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
 
 let ident_of_path ~default = function
@@ -101,6 +102,13 @@ let string_of_type id =
     Env.lookup_type id !Searchid.start_env in
     strip @@ string_of_type_decl path
 
+
+let infix s =
+  if Str.string_match (Str.regexp "[!$%&*+-./:<=>?@^|~]+") s 0 then
+    Printf.sprintf "(%s)" s
+  else
+    s
+
 let to_result configs (id, kind) =
   let id' =
     Longident.flatten id
@@ -121,7 +129,7 @@ let to_result configs (id, kind) =
   in
     match kind with
 	Searchid.Pvalue ->
-	  { t with desc = Value (string_of_value id) }
+	  { t with desc = Value (string_of_value id); name = infix t.name}
       | Searchid.Ptype ->
 	  { t with desc = Type (string_of_type id) }
       | Searchid.Pmodule ->
