@@ -74,14 +74,16 @@ td.where{
 	padding-right:5px;
 	width:150px;
 }
+
 td.entry{
 	width:650px;
 }
-.module {
+
+.where .module * {
 	color:#008C00;
 }
 
-.package {
+.package * {
 	 font-size:12px;
 	 color:#4096EE;
 }
