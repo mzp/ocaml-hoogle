@@ -29,10 +29,21 @@
       <span class="module">::module_html::</span><br />
       <span class="package">::package_html::</span>
     </td>
-::if(value)::
+::if(is_value)::
     <td class="entry value">
       val <span class="name">::name_html::</span> ::
       <span class="type">::type_html::</span>
+    </td>
+::end::
+
+::if(is_type)::
+    <td class="entry type">
+      type <span class="name">::name_html::</span> =
+      ::if(is_abstract)::
+      <span class="type abstract">&lt;abst&gt;</span>
+      ::else::
+      <span class="type concrete">::type_html::</span>
+      ::end::
     </td>
 ::end::
 

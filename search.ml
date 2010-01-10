@@ -1,9 +1,10 @@
 open Base
 open StdLabels
+open Types
 
 type desc =
     Value of string
-  | Type
+  | Type of string
   | Label
   | Constructor
   | Module
@@ -48,38 +49,75 @@ let find_package id configs =
   with _ ->
     "<unknown package>"
 
-let to_result configs (id, kind) =
-  let id' =
-    Longident.flatten id
-  in
+let string_of_value id =
   let name =
     match id with
 	Longident.Lident x -> x
       | Longident.Ldot (_, x) -> x
-      | _ -> match kind with Searchid.Pvalue | Searchid.Ptype | Searchid.Plabel -> "z" | _ -> "Z"
+      | _ -> "z"
+  in
+  let _, vd =
+    Env.lookup_value id !Searchid.start_env
+  in
+    Str.replace_first (Str.regexp "^[^:]*:") ""
+      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
+
+let ident_of_path ~default = function
+    Path.Pident i -> i
+  | Path.Pdot (_, s, _) -> Ident.create s
+  | Path.Papply _ -> Ident.create default
+
+let dummy_item = Tsig_modtype (Ident.create "dummy", Tmodtype_abstract)
+
+let string_of_type id =
+  let strip s =
+    if String.contains s '=' then
+      Str.replace_first (Str.regexp "^[^=]*=") "" s
+    else
+      ""
+  in
+  let path, decl =
+    Env.lookup_type id !Searchid.start_env in
+  let td =
+    Env.find_type path !Searchid.start_env
+  in
+    try
+      match td.type_manifest with
+	  None ->
+	    raise Not_found
+	| Some ty ->
+	    match Ctype.repr ty with
+		{ Types.desc = Tobject _} ->
+		  let
+		      clt = Env.find_cltype path !Searchid.start_env
+		  in
+		    strip @@ string_of_sign
+		      [Tsig_cltype (ident_of_path path ~default:"ct", clt, Trec_first);
+		       dummy_item; dummy_item]
+	      | _ -> raise Not_found
+    with Not_found ->
+	strip @@ string_of_sign
+	  [Tsig_type(ident_of_path path ~default:"t", td, Trec_first)]
+
+let to_result configs (id, kind) =
+  let id' =
+    Longident.flatten id
+  in
+  let t =
+    {
+      module_ = String.concat ~sep:"." @@ HList.init id';
+      name    = HList.last id';
+      package = find_package id' configs;
+      desc = ClassType
+    }
   in
     match kind with
 	Searchid.Pvalue ->
-	  let _, vd =
-	    Env.lookup_value id !Searchid.start_env
-	  in
-	  let t =
-	    Str.replace_first (Str.regexp "^[^:]*:") ""
-	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
-	  in
-	  {
-	    module_ = String.concat ~sep:"." @@ HList.init id';
-	    name    = HList.last id';
-	    package = find_package id' configs;
-	    desc   =  Value t
-	  }
+	  { t with desc = Value (string_of_value id) }
+      | Searchid.Ptype ->
+	  { t with desc = Type (string_of_type id) }
       | _ ->
-	  {
-	    module_ = String.concat ~sep:"." @@ HList.init id';
-	    name    = HList.last id';
-	    package = find_package id' configs;
-	    desc = Type
-	  }
+	  t
 
 let lift f configs s =
   s

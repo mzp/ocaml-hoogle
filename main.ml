@@ -15,13 +15,16 @@ let search_page (cgi : cgi) =
       match t.desc with
 	  Value s ->
 	    "value",[ "type", Template.VarString s]
+	| Type s ->
+	    "type",[ "type", Template.VarString s;
+		     "is_abstract", Template.VarConditional (s = "")]
 	| _ ->
 	    "", []
     in
       ["module" , Template.VarString t.module_;
        "name"   , Template.VarString t.name;
        "package", Template.VarString t.package]
-      @ List.map  ["value"] ~f:(fun x -> (x,Template.VarConditional (x = kind)))
+      @ List.map  ["value"; "type"] ~f:(fun x -> ("is_" ^ x,Template.VarConditional (x = kind)))
       @ opt
   in
   let result =

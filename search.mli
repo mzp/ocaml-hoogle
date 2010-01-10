@@ -1,6 +1,6 @@
 type desc =
     Value of string
-  | Type
+  | Type of string
   | Label
   | Constructor
   | Module
