@@ -29,10 +29,13 @@
       <span class="module">::module_html::</span><br />
       <span class="package">::package_html::</span>
     </td>
-    <td class="entry">
+::if(value)::
+    <td class="entry value">
       val <span class="name">::name_html::</span> ::
       <span class="type">::type_html::</span>
     </td>
+::end::
+
   </tr>
   ::end::
 ::else::

@@ -1,11 +1,21 @@
 open Base
 open StdLabels
 
+type desc =
+    Value of string
+  | Type
+  | Label
+  | Constructor
+  | Module
+  | ModuleType
+  | Class
+  | ClassType
+
 type t = {
-  module_: string;
+  module_ : string;
   package : string;
-  name : string;
-  type_  : string;
+  name    : string;
+  desc    : desc
 }
 
 let init configs =
@@ -53,19 +63,22 @@ let to_result configs (id, kind) =
 	  let _, vd =
 	    Env.lookup_value id !Searchid.start_env
 	  in
+	  let t =
+	    Str.replace_first (Str.regexp "^[^:]*:") ""
+	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
+	  in
 	  {
 	    module_ = String.concat ~sep:"." @@ HList.init id';
 	    name    = HList.last id';
 	    package = find_package id' configs;
-	    type_   = Str.replace_first (Str.regexp "^[^:]*:") ""
-	      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
+	    desc   =  Value t
 	  }
       | _ ->
 	  {
 	    module_ = String.concat ~sep:"." @@ HList.init id';
 	    name    = HList.last id';
 	    package = find_package id' configs;
-	    type_   = "<not yet>"
+	    desc = Type
 	  }
 
 let lift f configs s =

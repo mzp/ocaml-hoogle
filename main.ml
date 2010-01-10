@@ -11,10 +11,18 @@ let index_page (cgi : cgi) =
 
 let search_page (cgi : cgi) =
   let to_table t =
-    ["module" , Template.VarString t.module_;
-     "name"   , Template.VarString t.name;
-     "type"   , Template.VarString t.type_;
-     "package", Template.VarString t.package]
+    let kind, opt =
+      match t.desc with
+	  Value s ->
+	    "value",[ "type", Template.VarString s]
+	| _ ->
+	    "", []
+    in
+      ["module" , Template.VarString t.module_;
+       "name"   , Template.VarString t.name;
+       "package", Template.VarString t.package]
+      @ List.map  ["value"] ~f:(fun x -> (x,Template.VarConditional (x = kind)))
+      @ opt
   in
   let result =
     Search.search (cgi#param "q") (Config.read "modules.txt")
