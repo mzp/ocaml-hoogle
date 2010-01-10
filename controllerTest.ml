@@ -2,7 +2,9 @@ open Base
 open OUnit
 open Controller
 
-let ok x y = assert_equal x y
+let sort xs = List.sort (fun x y -> compare (fst x) (fst y)) xs
+
+let ok x y = assert_equal (sort x) (sort y)
 
 let config = [
   { Config.name = "some package"; modules = ["A"; "B"]};
