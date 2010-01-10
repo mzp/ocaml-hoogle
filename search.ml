@@ -5,12 +5,11 @@ open Types
 type desc =
     Value of string
   | Type of string
-  | Label
-  | Constructor
   | Module
   | ModuleType
   | Class
   | ClassType
+  | Other
 
 type t = {
   module_ : string;
@@ -69,15 +68,7 @@ let ident_of_path ~default = function
 
 let dummy_item = Tsig_modtype (Ident.create "dummy", Tmodtype_abstract)
 
-let string_of_type id =
-  let strip s =
-    if String.contains s '=' then
-      Str.replace_first (Str.regexp "^[^=]*=") "" s
-    else
-      ""
-  in
-  let path, decl =
-    Env.lookup_type id !Searchid.start_env in
+let string_of_type_decl path =
   let td =
     Env.find_type path !Searchid.start_env
   in
@@ -91,24 +82,41 @@ let string_of_type id =
 		  let
 		      clt = Env.find_cltype path !Searchid.start_env
 		  in
-		    strip @@ string_of_sign
+		    string_of_sign
 		      [Tsig_cltype (ident_of_path path ~default:"ct", clt, Trec_first);
 		       dummy_item; dummy_item]
 	      | _ -> raise Not_found
     with Not_found ->
-	strip @@ string_of_sign
-	  [Tsig_type(ident_of_path path ~default:"t", td, Trec_first)]
+      string_of_sign
+	[Tsig_type(ident_of_path path ~default:"t", td, Trec_first)]
+
+let string_of_type id =
+  let strip s =
+    if String.contains s '=' then
+      Str.replace_first (Str.regexp "^[^=]*=") "" s
+    else
+      ""
+  in
+  let path, decl =
+    Env.lookup_type id !Searchid.start_env in
+    strip @@ string_of_type_decl path
 
 let to_result configs (id, kind) =
   let id' =
     Longident.flatten id
   in
+  let module_ xs =
+    match xs with
+	[]  -> ""
+      | [x] -> x
+      |  _  -> String.concat ~sep:"." @@ HList.init xs
+  in
   let t =
     {
-      module_ = String.concat ~sep:"." @@ HList.init id';
+      module_ = module_ id';
       name    = HList.last id';
       package = find_package id' configs;
-      desc = ClassType
+      desc = Other
     }
   in
     match kind with
@@ -116,6 +124,10 @@ let to_result configs (id, kind) =
 	  { t with desc = Value (string_of_value id) }
       | Searchid.Ptype ->
 	  { t with desc = Type (string_of_type id) }
+      | Searchid.Pmodule ->
+	  { t with desc = Module }
+      | Searchid.Pmodtype ->
+	  { t with desc = ModuleType }
       | _ ->
 	  t
 

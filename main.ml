@@ -18,13 +18,18 @@ let search_page (cgi : cgi) =
 	| Type s ->
 	    "type",[ "type", Template.VarString s;
 		     "is_abstract", Template.VarConditional (s = "")]
+	| Module ->
+	    "module",[]
+	| ModuleType ->
+	    "sig",[]
 	| _ ->
 	    "", []
     in
       ["module" , Template.VarString t.module_;
        "name"   , Template.VarString t.name;
        "package", Template.VarString t.package]
-      @ List.map  ["value"; "type"] ~f:(fun x -> ("is_" ^ x,Template.VarConditional (x = kind)))
+      @ List.map  ["value"; "type"; "module"; "sig"]
+	~f:(fun x -> ("is_" ^ x,Template.VarConditional (x = kind)))
       @ opt
   in
   let result =

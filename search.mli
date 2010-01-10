@@ -1,12 +1,11 @@
 type desc =
     Value of string
   | Type of string
-  | Label
-  | Constructor
   | Module
   | ModuleType
   | Class
   | ClassType
+  | Other
 
 type t = {
   module_ : string;
