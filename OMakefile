@@ -43,7 +43,7 @@ clean:
 public.OUnitTest(name,files) =
 	protected.test_file = $(addsuffix Test,$(name))
 	protected.target    = $(addsuffix -runner,$(test_file))
-	protected.src_files = $(addprefix $(OUNIT_SRC_DIR),$(files))
+	protected.src_files = $(files)
 
 	.PHONY: check check-$(name) clean check-detail-$(name) check-detail
 	OCamlProgram($(target), $(test_file) $(src_files) $(OUNIT_LIBS))
@@ -58,6 +58,13 @@ public.OUnitTest(name,files) =
 	check-detail: check-detail-$(name)
 
 	export
+
+OUNIT_LIBS[] =
+	base
+	hList
+
+OUnitTest(config, config)
+#OUnitTest(search, seach)
 
 ########################################################################
 # Permission is hereby granted, free of charge, to any person
