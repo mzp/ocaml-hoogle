@@ -6,45 +6,31 @@ open CamlGI.Template
 
 open Search
 
+let rec to_var = function
+    Controller.String s ->
+      Template.VarString s
+  | Controller.Bool b ->
+      Template.VarConditional b
+
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
 
 let search_page (cgi : cgi) =
-  let to_table t =
-    let kind, opt =
-      match t.desc with
-	  Value s ->
-	    "value",[ "type", Template.VarString s]
-	| Type s ->
-	    "type",[ "type", Template.VarString s;
-		     "is_abstract", Template.VarConditional (s = "")]
-	| Module ->
-	    "module",[]
-	| ModuleType ->
-	    "sig",[]
-	| Class ->
-	    "class",[]
-	| ClassType ->
-	    "class_type",[]
-	| _ ->
-	    "", []
-    in
-      ["module" , Template.VarString t.module_;
-       "name"   , Template.VarString t.name;
-       "package", Template.VarString t.package]
-      @ List.map  ["value"; "type"; "module"; "sig"; "class"; "class_type"]
-	~f:(fun x -> ("is_" ^ x,Template.VarConditional (x = kind)))
-      @ opt
+  let configs =
+    Config.read "modules.txt"
   in
   let result =
-    Search.search (cgi#param "q") (Config.read "modules.txt")
+    HList.concat_map (fun {Config.modules=m} -> m) configs
+    +> Search.search (cgi#param "q")
+    +> List.map ~f:(List.map ~f:(fun (name,v) -> (name,to_var v))
+		  $ Controller.format configs)
   in
   let t =
     template "templates/search.html"
   in
     t#set "query" @@ cgi#param "q";
     t#conditional "found" @@ (result <> []);
-    t#table "result" @@ List.map ~f:to_table result;
+    t#table "result" result;
     cgi#template t
 
 let _ =
