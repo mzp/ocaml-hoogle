@@ -7,3 +7,5 @@
 *.run
 *.annot
 *.o
+*-runner
+config-test.txt
