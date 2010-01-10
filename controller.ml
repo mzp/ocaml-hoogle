@@ -4,7 +4,6 @@ open StdLabels
 type t =
     String of string
   | Bool   of bool
-  | Table  of (string * t) list
 
 let find_package module_ configs =
   let config =
