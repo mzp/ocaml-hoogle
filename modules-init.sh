@@ -1,3 +1,6 @@
+#!/bin/sh
+
+cat <<EOF > modules.txt
 - stdlib
 Pervasives
 Arg
@@ -39,3 +42,25 @@ String
 StringLabels
 Sys
 Weak
+- extlib
+PATH:: `ocamlfind query extlib`
+IO
+Base64
+BitSet
+Dllist
+DynArray
+Enum
+ExtArray
+ExtHashtbl
+ExtList
+ExtString
+Global
+OptParse
+Option
+PMap
+RefList
+Std
+UChar
+UTF8
+Unzip
+EOF

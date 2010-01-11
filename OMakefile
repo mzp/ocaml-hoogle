@@ -35,11 +35,18 @@ PROGRAM = index.cgi
 OCAML_OTHER_LIBS += toplevellib
 # OCAML_LIB_FLAGS +=
 #
-.DEFAULT: $(OCamlProgram $(PROGRAM), $(FILES))
 
-.PHONY: clean
+.PHONY: clean all
+
+all: $(OCamlProgram $(PROGRAM), $(FILES)) modules.txt
+
+modules.txt : modules-init.sh
+	./modules-init.sh
+
 clean:
 	rm -f *.cm[oix] *.o *.omc  $(PROGRAM) *.run *~ *.annot
+
+.DEFAULT: all
 
 # test
 public.OUnitTest(name,files) =
