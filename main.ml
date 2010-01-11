@@ -48,9 +48,11 @@ let search_page (cgi : cgi) =
   let configs =
     Config.read "modules.txt"
   in
-  let page, content =
+  let modules =
     HList.concat_map (fun {Config.modules=m} -> m) configs
-    +> Search.search (cgi#param "q")
+  in
+  let page, content =
+    Search.search (cgi#param "q") modules []
     +> Controller.pagenation ~window:20 ~offset:(try
 						   int_of_string @@ cgi#param "o"
 						 with  _ -> 0)

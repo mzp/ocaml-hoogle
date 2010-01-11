@@ -20,9 +20,10 @@ type t = {
 let init_modules =
   !Searchid.module_list
 
-let init modules =
+let init modules paths =
   (* initialize *)
   Toploop.set_paths ();
+  List.iter ~f:Topdirs.dir_directory paths;
   Searchid.module_list := modules @ init_modules
 
 let sure f x =
@@ -141,8 +142,8 @@ let lift f s =
   +> sure f
   +> List.map ~f:to_result
 
-let search s modules =
-  init modules;
+let search s modules paths =
+  init modules paths;
   lift (Searchid.search_string_type ~mode:`Included) s
   @ lift Searchid.search_string_symbol  s
   @ lift Searchid.search_pattern_symbol s

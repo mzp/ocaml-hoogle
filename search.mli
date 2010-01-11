@@ -13,4 +13,4 @@ type t = {
   kind    : kind
 }
 
-val search : string -> string list -> t list
+val search : string -> string list -> string list -> t list
