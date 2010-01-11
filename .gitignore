@@ -9,3 +9,4 @@
 *.o
 *-runner
 config-test.txt
+modules.txt
