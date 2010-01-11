@@ -1,0 +1,65 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><title>OptParse.OptParser</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">exception</span>&nbsp;<span class="constructor">Option_conflict</span>&nbsp;<span class="keyword">of</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;t<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;group<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;make&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?usage:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?description:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?version:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?suppress_usage:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?suppress_help:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?prog:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?formatter:<span class="constructor">OptParse</span>.<span class="constructor">Formatter</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;add&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?group:<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.group&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?help:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?hide:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?short_name:char&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?short_names:char&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?long_name:string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;?long_names:string&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">Opt</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;add_group&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?parent:<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.group&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?description:string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.group<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;error&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?chn:<span class="constructor">Pervasives</span>.out_channel&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;?status:int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;usage&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;?chn:<span class="constructor">Pervasives</span>.out_channel&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;parse&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?first:int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;?last:int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;parse_argv&nbsp;:&nbsp;<span class="constructor">OptParse</span>.<span class="constructor">OptParser</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;list<br>
+<span class="keyword">end</span></code></body></html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="RefList.html">
+<link rel="next" href="UChar.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><title>Std</title>
+</head>
+<body>
+<div class="navbar"><a href="RefList.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="UChar.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Std.html">Std</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Std: <code class="code">sig</code> <a href="Std.html">..</a> <code class="code">end</code></pre>Additional functions.<br>
+<hr width="100%">
+<pre><span class="keyword">val</span> <a name="VALinput_lines"></a>input_lines : <code class="type">Pervasives.in_channel -> string <a href="Enum.html#TYPEt">Enum.t</a></code></pre><div class="info">
+Returns an enumeration over lines of an input channel, as read by the
+ <code class="code">input_line</code> function.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinput_chars"></a>input_chars : <code class="type">Pervasives.in_channel -> char <a href="Enum.html#TYPEt">Enum.t</a></code></pre><div class="info">
+Returns an enumeration over characters of an input channel.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinput_list"></a>input_list : <code class="type">Pervasives.in_channel -> string list</code></pre><div class="info">
+Returns the list of lines read from an input channel.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinput_all"></a>input_all : <code class="type">Pervasives.in_channel -> string</code></pre><div class="info">
+Return the whole contents of an input channel as a single
+ string.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALprint_bool"></a>print_bool : <code class="type">bool -> unit</code></pre><div class="info">
+Print a boolean to stdout.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALprerr_bool"></a>prerr_bool : <code class="type">bool -> unit</code></pre><div class="info">
+Print a boolean to stderr.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinput_file"></a>input_file : <code class="type">?bin:bool -> string -> string</code></pre><div class="info">
+returns the data of a given filename.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALoutput_file"></a>output_file : <code class="type">filename:string -> text:string -> unit</code></pre><div class="info">
+creates a filename, write text into it and close it.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALstring_of_char"></a>string_of_char : <code class="type">char -> string</code></pre><div class="info">
+creates a string from a char.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALidentity"></a>identity : <code class="type">'a -> 'a</code></pre><div class="info">
+the identity function.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunique"></a>unique : <code class="type">unit -> int</code></pre><div class="info">
+returns an unique identifier every time it is called.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdump"></a>dump : <code class="type">'a -> string</code></pre><div class="info">
+represent a runtime value as a string. Since types are lost at compile
+	time, the representation might not match your type. For example, None
+	will be printed 0 since they share the same runtime representation.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALprint"></a>print : <code class="type">'a -> unit</code></pre><div class="info">
+print the representation of a runtime value on stdout.
+	See remarks for <code class="code">dump</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfinally"></a>finally : <code class="type">(unit -> unit) -> ('a -> 'b) -> 'a -> 'b</code></pre><div class="info">
+<code class="code">finally fend f x</code> calls <code class="code">f x</code> and then <code class="code">fend()</code> even if <code class="code">f x</code> raised
+	an exception.<br>
+</div>
+</body></html>

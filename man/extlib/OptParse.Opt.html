@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="OptParse.StdOpt.html">
+<link rel="Up" href="OptParse.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><link title="Exceptions" rel="Section" href="#6_Exceptions">
+<link title="Types" rel="Section" href="#6_Types">
+<link title="Option value retrieval" rel="Section" href="#6_Optionvalueretrieval">
+<link title="Option creation" rel="Section" href="#6_Optioncreation">
+<title>OptParse.Opt</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="OptParse.html">Up</a>
+&nbsp;<a href="OptParse.StdOpt.html">Next</a>
+</div>
+<center><h1>Module <a href="type_OptParse.Opt.html">OptParse.Opt</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Opt: <code class="code">sig</code> <a href="OptParse.Opt.html">..</a> <code class="code">end</code></pre>This module contains the basic functions and types for defining
+  new option types and accessing the values of options.<br>
+<hr width="100%">
+<br>
+<a name="6_Exceptions"></a>
+<h6>Exceptions</h6><br>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONNo_value"></a>No_value</pre>
+<div class="info">
+<code class="code">No_value</code> gets raised by <a href="OptParse.Opt.html#VALget"><code class="code">OptParse.Opt.get</code></a> when an option
+      value is not available.<br>
+</div>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONOption_error"></a>Option_error <span class="keyword">of</span> <code class="type">string * string</code></pre>
+<div class="info">
+This exception signals that an option value is invalid. The
+      first string contains the option string ('-x' or '--long-name')
+      and the second string contains an error message.
+<p>
+
+      This exception is only used when implementing custom option types
+      and can never "escape" the scope of a <a href="OptParse.OptParser.html#VALparse"><code class="code">OptParse.OptParser.parse</code></a>.
+      The user should therefore not attempt to catch it.<br>
+</div>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONOption_help"></a>Option_help</pre>
+<div class="info">
+When an option wants to display a usage message, this exception
+      may be raised.  It can never "escape" the scope of a
+      <a href="OptParse.OptParser.html#VALparse"><code class="code">OptParse.OptParser.parse</code></a> call and the user should therefore not
+      attempt to catch it.<br>
+</div>
+<br>
+<a name="6_Types"></a>
+<h6>Types</h6><br>
+<br><code><span class="keyword">type</span> <a name="TYPEt"></a><code class="type">'a</code> t = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>option_set&nbsp;: <code class="type">string -> string list -> unit</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>option_set_value&nbsp;: <code class="type">'a -> unit</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>option_get&nbsp;: <code class="type">unit -> 'a option</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>option_metavars&nbsp;: <code class="type">string list</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>option_defhelp&nbsp;: <code class="type">string option</code>;</code></td>
+
+</tr></table>
+}
+
+<div class="info">
+Option type.
+<p>
+
+      <code class="code">option_set</code> is a closure which converts and records the value of
+      an option so that it can be retrieved with a later call to the
+      <code class="code">option_get</code> closure. It is called with the option name which was
+      given on the command line and a list of strings, each representing
+      one of the argument values given on the command line. It may raise
+      <code class="code">Option_error</code> if the value is invalid (for whatever reason).
+<p>
+
+      <code class="code">option_set_value</code> is a closure which sets the value of an option
+      to a particular value.
+<p>
+
+      <code class="code">option_get</code> is a closure which retrieves the recorded value
+      of the option. If the option value has not been set from the
+      command line, the default value is used.  If there is no default
+      value, then <code class="code">None</code> should be returned.
+<p>
+
+      <code class="code">option_metavars</code> is a list of "meta-variables" (arguments)
+      which this option accepts. This is mainly for display purposes,
+      but the length of this list determines how many arguments the
+      option parser accepts for this option (currently only lists of
+      length 0 or 1 are supported).
+<p>
+
+      <code class="code">option_defhelp</code> is the default help string (if any).  It is
+      used for displaying help messages whenever the user does <b>      not</b> specify a help string manually when adding this
+      option. Using a non-None value here only makes sense for
+      completely generic options like <a href="OptParse.StdOpt.html#VALhelp_option"><code class="code">OptParse.StdOpt.help_option</code></a>.<br>
+</div>
+
+<br>
+<a name="6_Optionvalueretrieval"></a>
+<h6>Option value retrieval</h6><br>
+<pre><span class="keyword">val</span> <a name="VALget"></a>get : <code class="type">'a <a href="OptParse.Opt.html#TYPEt">t</a> -> 'a</code></pre><div class="info">
+Get the value of an option.<br>
+<b>Raises</b> <code>No_value</code> if no default values has been given
+      and the option value has not been set from the command line.<br>
+<b>Returns</b> the value of the option. If the option has not been
+      encountered while parsing the command line, the default value is
+      returned.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALset"></a>set : <code class="type">'a <a href="OptParse.Opt.html#TYPEt">t</a> -> 'a -> unit</code></pre><div class="info">
+Set the value of an option.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALopt"></a>opt : <code class="type">'a <a href="OptParse.Opt.html#TYPEt">t</a> -> 'a option</code></pre><div class="info">
+Get the value of an option as an optional value.<br>
+<b>Returns</b> <code class="code">Some x</code> if the option has value <code class="code">x</code> (either by default or
+      from the command line). If the option doesn't have a value <code class="code">None</code>
+      is returned.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALis_set"></a>is_set : <code class="type">'a <a href="OptParse.Opt.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+Find out if the option has a value (either by default or
+      from the command line).<br>
+<b>Returns</b> <code class="code">True</code> iff the option has a value.<br>
+</div>
+<br>
+<a name="6_Optioncreation"></a>
+<h6>Option creation</h6><br>
+<pre><span class="keyword">val</span> <a name="VALvalue_option"></a>value_option : <code class="type">string -><br>       'a option -> (string -> 'a) -> (exn -> string -> string) -> 'a <a href="OptParse.Opt.html#TYPEt">t</a></code></pre><div class="info">
+Make an option which takes a single argument.
+<p>
+
+      <code class="code">value_option metavar default coerce errfmt</code> returns an option
+      which takes a single argument from the command line and calls
+      <code class="code">coerce</code> to coerce it to the proper type. If <code class="code">coerce</code> raises an
+      exception, <code class="code">exn</code>, then <code class="code">errfmt exn argval</code> is called to generate
+      an error message for display. <code class="code">metavar</code> is the name of the
+      metavariable of the option.
+<p>
+
+      <code class="code">default</code> is the default value of the option. If <code class="code">None</code>, the the
+      option has no default value.<br>
+<b>Returns</b> the newly created option.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcallback_option"></a>callback_option : <code class="type">string -><br>       (string -> 'a) -><br>       (exn -> string -> string) -> ('a -> unit) -> unit <a href="OptParse.Opt.html#TYPEt">t</a></code></pre><div class="info">
+Make a callback option which takes a single argument.
+<p>
+
+      <code class="code">callback_option metavar coerce errfmt f</code> returns an option which
+      takes a single argument from the command line and calls <code class="code">coerce</code>
+      to coerce it to the proper type. If <code class="code">coerce</code> raises an exception
+      <code class="code">errfmt exn argval</code> is called to format an error message for
+      display. If <code class="code">coerce</code> succeeds, the callback function <code class="code">f</code> is called
+      with the coerced value. Finally, <code class="code">metavar</code> is the name of the
+      metavariable of the option.<br>
+<b>Returns</b> the newly created option.<br>
+</div>
+</body></html>

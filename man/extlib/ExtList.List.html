@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="ExtList.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><link title="New functions" rel="Section" href="#6_Newfunctions">
+<link title="Enum functions" rel="Section" href="#6_Enumfunctions">
+<link title="Modified functions" rel="Section" href="#6_Modifiedfunctions">
+<link title="Improved functions" rel="Section" href="#6_Improvedfunctions">
+<link title="Older functions" rel="Section" href="#6_Olderfunctions">
+<link title="Exceptions" rel="Section" href="#6_Exceptions">
+<title>ExtList.List</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="ExtList.html">Up</a>
+&nbsp;</div>
+<center><h1>Module <a href="type_ExtList.List.html">ExtList.List</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> List: <code class="code">sig</code> <a href="ExtList.List.html">..</a> <code class="code">end</code></pre><hr width="100%">
+<br>
+<a name="6_Newfunctions"></a>
+<h6>New functions</h6><br>
+<pre><span class="keyword">val</span> <a name="VALinit"></a>init : <code class="type">int -> (int -> 'a) -> 'a list</code></pre><div class="info">
+Similar to <code class="code">Array.init</code>, <code class="code">init n f</code> returns the list containing
+	 the results of (f 0),(f 1).... (f (n-1)).
+	 Raise <code class="code">Invalid_arg "ExtList.init"</code> if n &lt; 0.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmake"></a>make : <code class="type">int -> 'a -> 'a list</code></pre><div class="info">
+Similar to <code class="code">String.make</code>, <code class="code">make n x</code> returns a
+	    * list containing <code class="code">n</code> elements <code class="code">x</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfirst"></a>first : <code class="type">'a list -> 'a</code></pre><div class="info">
+Returns the first element of the list, or raise <code class="code">Empty_list</code> if
+	 the list is empty (similar to <code class="code">hd</code>).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALlast"></a>last : <code class="type">'a list -> 'a</code></pre><div class="info">
+Returns the last element of the list, or raise <code class="code">Empty_list</code> if
+	 the list is empty. This function takes linear time.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALiteri"></a>iteri : <code class="type">(int -> 'a -> 'b) -> 'a list -> unit</code></pre><div class="info">
+<code class="code">iteri f l</code> will call <code class="code">(f 0 a0);(f 1 a1) ... (f n an)</code> where
+	 <code class="code">a0..an</code> are the elements of the list <code class="code">l</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmapi"></a>mapi : <code class="type">(int -> 'a -> 'b) -> 'a list -> 'b list</code></pre><div class="info">
+<code class="code">mapi f l</code> will build the list containing
+	 <code class="code">(f 0 a0);(f 1 a1) ... (f n an)</code> where <code class="code">a0..an</code> are the elements of
+	 the list <code class="code">l</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALrfind"></a>rfind : <code class="type">('a -> bool) -> 'a list -> 'a</code></pre><div class="info">
+<code class="code">rfind p l</code> returns the last element <code class="code">x</code> of <code class="code">l</code> such as <code class="code">p x</code> returns
+	 <code class="code">true</code> or raises <code class="code">Not_found</code> if such element as not been found.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfind_exc"></a>find_exc : <code class="type">('a -> bool) -> exn -> 'a list -> 'a</code></pre><div class="info">
+<code class="code">find_exc p e l</code> returns the first element of <code class="code">l</code> such as <code class="code">p x</code>
+	 returns <code class="code">true</code> or raises <code class="code">e</code> if such element as not been found.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfindi"></a>findi : <code class="type">(int -> 'a -> bool) -> 'a list -> int * 'a</code></pre><div class="info">
+<code class="code">findi p e l</code> returns the first element <code class="code">ai</code> of <code class="code">l</code> along with its
+	 index <code class="code">i</code> such that <code class="code">p i ai</code> is true, or raises <code class="code">Not_found</code> if no
+	 such element has been found.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunique"></a>unique : <code class="type">?cmp:('a -> 'a -> bool) -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">unique cmp l</code> returns the list <code class="code">l</code> without any duplicate element.
+	 Default comparator ( = ) is used if no comparison function specified.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfilter_map"></a>filter_map : <code class="type">('a -> 'b option) -> 'a list -> 'b list</code></pre><div class="info">
+<code class="code">filter_map f l</code> call <code class="code">(f a0) (f a1).... (f an)</code> where <code class="code">a0..an</code> are
+	 the elements of <code class="code">l</code>. It returns the list of elements <code class="code">bi</code> such as
+	 <code class="code">f ai = Some bi</code> (when <code class="code">f</code> returns <code class="code">None</code>, the corresponding element of
+	 <code class="code">l</code> is discarded).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALsplit_nth"></a>split_nth : <code class="type">int -> 'a list -> 'a list * 'a list</code></pre><div class="info">
+<code class="code">split_nth n l</code> returns two lists <code class="code">l1</code> and <code class="code">l2</code>, <code class="code">l1</code> containing the
+	 first <code class="code">n</code> elements of <code class="code">l</code> and <code class="code">l2</code> the others. Raise <code class="code">Invalid_index</code> if
+	 <code class="code">n</code> is outside of <code class="code">l</code> size bounds.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALremove"></a>remove : <code class="type">'a list -> 'a -> 'a list</code></pre><div class="info">
+<code class="code">remove l x</code> returns the list <code class="code">l</code> without the first element <code class="code">x</code> found
+	 or returns  <code class="code">l</code> if no element is equal to <code class="code">x</code>. Elements are compared
+	 using ( = ).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALremove_if"></a>remove_if : <code class="type">('a -> bool) -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">remove_if cmp l</code> is similar to <code class="code">remove</code>, but with <code class="code">cmp</code> used
+	 instead of ( = ).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALremove_all"></a>remove_all : <code class="type">'a list -> 'a -> 'a list</code></pre><div class="info">
+<code class="code">remove_all l x</code> is similar to <code class="code">remove</code> but removes all elements that
+	 are equal to <code class="code">x</code> and not only the first one.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtake"></a>take : <code class="type">int -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">take n l</code> returns up to the <code class="code">n</code> first elements from list <code class="code">l</code>, if
+	 available.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdrop"></a>drop : <code class="type">int -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">drop n l</code> returns <code class="code">l</code> without the first <code class="code">n</code> elements, or the empty
+	 list if <code class="code">l</code> have less than <code class="code">n</code> elements.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtakewhile"></a>takewhile : <code class="type">('a -> bool) -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">takewhile f xs</code> returns the first elements of list <code class="code">xs</code>
+	      which satisfy the predicate <code class="code">f</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdropwhile"></a>dropwhile : <code class="type">('a -> bool) -> 'a list -> 'a list</code></pre><div class="info">
+<code class="code">dropwhile f xs</code> returns the list <code class="code">xs</code> with the first
+	      elements satisfying the predicate <code class="code">f</code> dropped.<br>
+</div>
+<br>
+<a name="6_Enumfunctions"></a>
+<h6>Enum functions</h6><br>
+<br>
+Enumerations are important in ExtLib, they are a good way to work with
+	 abstract enumeration of elements, regardless if they are located in a list,
+	 an array, or a file.<br>
+<pre><span class="keyword">val</span> <a name="VALenum"></a>enum : <code class="type">'a list -> 'a <a href="Enum.html#TYPEt">Enum.t</a></code></pre><div class="info">
+Returns an enumeration of the elements of a list.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALof_enum"></a>of_enum : <code class="type">'a <a href="Enum.html#TYPEt">Enum.t</a> -> 'a list</code></pre><div class="info">
+Build a list from an enumeration.<br>
+</div>
+<br>
+<a name="6_Modifiedfunctions"></a>
+<h6>Modified functions</h6><br>
+<br>
+Some minor modifications have been made to the specification of some
+	 functions, especially concerning exceptions raised.<br>
+<pre><span class="keyword">val</span> <a name="VALhd"></a>hd : <code class="type">'a list -> 'a</code></pre><div class="info">
+Returns the first element of the list or raise <code class="code">Empty_list</code> if the
+	 list is empty.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtl"></a>tl : <code class="type">'a list -> 'a list</code></pre><div class="info">
+Returns the list without its first elements or raise <code class="code">Empty_list</code> if
+	 the list is empty.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALnth"></a>nth : <code class="type">'a list -> int -> 'a</code></pre><div class="info">
+<code class="code">nth l n</code> returns the n-th element of the list <code class="code">l</code> or raise
+	 <code class="code">Invalid_index</code> is the index is outside of <code class="code">l</code> bounds.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALsort"></a>sort : <code class="type">?cmp:('a -> 'a -> int) -> 'a list -> 'a list</code></pre><div class="info">
+Sort the list using optional comparator (by default <code class="code">compare</code>).<br>
+</div>
+<br>
+The following functions have been improved so all of them are
+	 tail-recursive. They have also been modified so they no longer
+	 raise <code class="code">Invalid_arg</code> but <code class="code">Different_list_size</code> when used on two
+	 lists having a different number of elements.<br>
+<pre><span class="keyword">val</span> <a name="VALmap2"></a>map2 : <code class="type">('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list</code></pre><pre><span class="keyword">val</span> <a name="VALiter2"></a>iter2 : <code class="type">('a -> 'b -> unit) -> 'a list -> 'b list -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALfold_left2"></a>fold_left2 : <code class="type">('a -> 'b -> 'c -> 'a) -> 'a -> 'b list -> 'c list -> 'a</code></pre><pre><span class="keyword">val</span> <a name="VALfold_right2"></a>fold_right2 : <code class="type">('a -> 'b -> 'c -> 'c) -> 'a list -> 'b list -> 'c -> 'c</code></pre><pre><span class="keyword">val</span> <a name="VALfor_all2"></a>for_all2 : <code class="type">('a -> 'b -> bool) -> 'a list -> 'b list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALexists2"></a>exists2 : <code class="type">('a -> 'b -> bool) -> 'a list -> 'b list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALcombine"></a>combine : <code class="type">'a list -> 'b list -> ('a * 'b) list</code></pre><br>
+<a name="6_Improvedfunctions"></a>
+<h6>Improved functions</h6><br>
+<br>
+The following functions have the same behavior as the <code class="code">List</code>
+		module ones but are tail-recursive. That means they will not
+		cause a <code class="code">Stack_overflow</code> when used on very long list.
+<p>
+
+		The implementation might be a little more slow in bytecode,
+		but compiling in native code will not affect performances.<br>
+<pre><span class="keyword">val</span> <a name="VALmap"></a>map : <code class="type">('a -> 'b) -> 'a list -> 'b list</code></pre><pre><span class="keyword">val</span> <a name="VALappend"></a>append : <code class="type">'a list -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALflatten"></a>flatten : <code class="type">'a list list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALconcat"></a>concat : <code class="type">'a list list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALfold_right"></a>fold_right : <code class="type">('a -> 'b -> 'b) -> 'a list -> 'b -> 'b</code></pre><pre><span class="keyword">val</span> <a name="VALremove_assoc"></a>remove_assoc : <code class="type">'a -> ('a * 'b) list -> ('a * 'b) list</code></pre><pre><span class="keyword">val</span> <a name="VALremove_assq"></a>remove_assq : <code class="type">'a -> ('a * 'b) list -> ('a * 'b) list</code></pre><pre><span class="keyword">val</span> <a name="VALsplit"></a>split : <code class="type">('a * 'b) list -> 'a list * 'b list</code></pre><br>
+The following functions were already tail-recursive in the <code class="code">List</code>
+		module but were using <code class="code">List.rev</code> calls. The new implementations
+		have better performances.<br>
+<pre><span class="keyword">val</span> <a name="VALfilter"></a>filter : <code class="type">('a -> bool) -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALfind_all"></a>find_all : <code class="type">('a -> bool) -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALpartition"></a>partition : <code class="type">('a -> bool) -> 'a list -> 'a list * 'a list</code></pre><br>
+<a name="6_Olderfunctions"></a>
+<h6>Older functions</h6><br>
+<br>
+These functions are already part of the Ocaml standard library
+		and have not been modified. Please refer to the Ocaml Manual for
+		documentation.<br>
+<pre><span class="keyword">val</span> <a name="VALlength"></a>length : <code class="type">'a list -> int</code></pre><pre><span class="keyword">val</span> <a name="VALrev_append"></a>rev_append : <code class="type">'a list -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALrev"></a>rev : <code class="type">'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALrev_map"></a>rev_map : <code class="type">('a -> 'b) -> 'a list -> 'b list</code></pre><pre><span class="keyword">val</span> <a name="VALiter"></a>iter : <code class="type">('a -> unit) -> 'a list -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALfold_left"></a>fold_left : <code class="type">('a -> 'b -> 'a) -> 'a -> 'b list -> 'a</code></pre><pre><span class="keyword">val</span> <a name="VALfor_all"></a>for_all : <code class="type">('a -> bool) -> 'a list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALexists"></a>exists : <code class="type">('a -> bool) -> 'a list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALfind"></a>find : <code class="type">('a -> bool) -> 'a list -> 'a</code></pre><pre><span class="keyword">val</span> <a name="VALmem"></a>mem : <code class="type">'a -> 'a list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALmemq"></a>memq : <code class="type">'a -> 'a list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALassoc"></a>assoc : <code class="type">'a -> ('a * 'b) list -> 'b</code></pre><pre><span class="keyword">val</span> <a name="VALassq"></a>assq : <code class="type">'a -> ('a * 'b) list -> 'b</code></pre><pre><span class="keyword">val</span> <a name="VALmem_assoc"></a>mem_assoc : <code class="type">'a -> ('a * 'b) list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALmem_assq"></a>mem_assq : <code class="type">'a -> ('a * 'b) list -> bool</code></pre><pre><span class="keyword">val</span> <a name="VALstable_sort"></a>stable_sort : <code class="type">('a -> 'a -> int) -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALfast_sort"></a>fast_sort : <code class="type">('a -> 'a -> int) -> 'a list -> 'a list</code></pre><pre><span class="keyword">val</span> <a name="VALmerge"></a>merge : <code class="type">('a -> 'a -> int) -> 'a list -> 'a list -> 'a list</code></pre><br>
+<a name="6_Exceptions"></a>
+<h6>Exceptions</h6><br>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONEmpty_list"></a>Empty_list</pre>
+<div class="info">
+<code class="code">Empty_list</code> is raised when an operation applied on an empty list
+		is invalid : <code class="code">hd</code> for example.<br>
+</div>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONInvalid_index"></a>Invalid_index <span class="keyword">of</span> <code class="type">int</code></pre>
+<div class="info">
+<code class="code">Invalid_index</code> is raised when an indexed access on a list is
+		out of list bounds.<br>
+</div>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONDifferent_list_size"></a>Different_list_size <span class="keyword">of</span> <code class="type">string</code></pre>
+<div class="info">
+<code class="code">Different_list_size</code> is raised when applying functions such as
+		<code class="code">iter2</code> on two lists having different size.<br>
+</div>
+</body></html>

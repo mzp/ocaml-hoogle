@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Base64.html">
+<link rel="next" href="Dllist.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><title>BitSet</title>
+</head>
+<body>
+<div class="navbar"><a href="Base64.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Dllist.html">Next</a>
+</div>
+<center><h1>Module <a href="type_BitSet.html">BitSet</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> BitSet: <code class="code">sig</code> <a href="BitSet.html">..</a> <code class="code">end</code></pre>Efficient bit sets.
+<p>
+
+ A bitset is an array of boolean values that can be accessed with indexes
+ like an array but provides a better memory usage (divided by 8) for a
+ very small speed trade-off.<br>
+<hr width="100%">
+<pre><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t </pre>
+
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONNegative_index"></a>Negative_index <span class="keyword">of</span> <code class="type">string</code></pre>
+<div class="info">
+When a negative bit value is used for one of the BitSet functions,
+ this exception is raised with the name of the function.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALempty"></a>empty : <code class="type">unit -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+Create an empty bitset of size 0, the bitset will automatically expand
+ when needed.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcreate"></a>create : <code class="type">int -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+Create an empty bitset with an initial size (in number of bits).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcopy"></a>copy : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+Copy a bitset : further modifications of first one will not affect the
+ copy.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALclone"></a>clone : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+Same as <code class="code">copy</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALset"></a>set : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int -> unit</code></pre><div class="info">
+<code class="code">set s n</code> sets the nth-bit in the bitset <code class="code">s</code> to true.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunset"></a>unset : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int -> unit</code></pre><div class="info">
+<code class="code">unset s n</code> sets the nth-bit in the bitset <code class="code">s</code> to false.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALput"></a>put : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> bool -> int -> unit</code></pre><div class="info">
+<code class="code">put s v n</code> sets the nth-bit in the bitset <code class="code">s</code> to <code class="code">v</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtoggle"></a>toggle : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int -> unit</code></pre><div class="info">
+<code class="code">toggle s n</code> changes the nth-bit value in the bitset <code class="code">s</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALis_set"></a>is_set : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int -> bool</code></pre><div class="info">
+<code class="code">is_set s n</code> returns true if nth-bit in the bitset <code class="code">s</code> is set,
+ or false otherwise.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcompare"></a>compare : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">compare s1 s2</code> compares two bitsets. Highest bit indexes are
+ compared first.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALequals"></a>equals : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">equals s1 s2</code> returns true if, and only if, all bits values in s1 are
+  the same as in s2.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcount"></a>count : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">count s</code> returns the number of bits set in the bitset <code class="code">s</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALenum"></a>enum : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> int <a href="Enum.html#TYPEt">Enum.t</a></code></pre><div class="info">
+<code class="code">enum s</code> returns an enumeration of bits which are set
+  in the bitset <code class="code">s</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALintersect"></a>intersect : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">intersect s t</code> sets <code class="code">s</code> to the intersection of the sets <code class="code">s</code> and <code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunite"></a>unite : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">unite s t</code> sets <code class="code">s</code> to the union of the sets <code class="code">s</code> and <code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdifferentiate"></a>differentiate : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">differentiate s t</code> removes the elements of <code class="code">t</code> from <code class="code">s</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdifferentiate_sym"></a>differentiate_sym : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">differentiate_sym s t</code> sets <code class="code">s</code> to the symmetrical difference of the
+  sets <code class="code">s</code> and <code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinter"></a>inter : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">inter s t</code> returns the intersection of sets <code class="code">s</code> and <code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunion"></a>union : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">union s t</code> return the union of sets <code class="code">s</code>  and <code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdiff"></a>diff : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">diff s t</code> returns <code class="code">s</code>-<code class="code">t</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALsym_diff"></a>sym_diff : <code class="type"><a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a> -> <a href="BitSet.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">sym_diff s t</code> returns the symmetrical difference of <code class="code">s</code> and <code class="code">t</code>.<br>
+</div>
+</body></html>

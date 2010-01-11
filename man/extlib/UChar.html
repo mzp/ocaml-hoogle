@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Std.html">
+<link rel="next" href="UTF8.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><title>UChar</title>
+</head>
+<body>
+<div class="navbar"><a href="Std.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="UTF8.html">Next</a>
+</div>
+<center><h1>Module <a href="type_UChar.html">UChar</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> UChar: <code class="code">sig</code> <a href="UChar.html">..</a> <code class="code">end</code></pre>Unicode (ISO-UCS) characters.
+<p>
+
+   This module implements Unicode (actually ISO-UCS) characters.  All
+   31-bit code points are allowed.<br>
+<hr width="100%">
+<pre><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t </pre>
+<div class="info">
+Unicode characters. All 31-bit code points are allowed.<br>
+</div>
+
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONOut_of_range"></a>Out_of_range</pre>
+<pre><span class="keyword">val</span> <a name="VALchar_of"></a>char_of : <code class="type"><a href="UChar.html#TYPEt">t</a> -> char</code></pre><div class="info">
+<code class="code">char_of u</code> returns the Latin-1 representation of <code class="code">u</code>.
+   If <code class="code">u</code> can not be represented by Latin-1, raises Out_of_range<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALof_char"></a>of_char : <code class="type">char -> <a href="UChar.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_char c</code> returns the Unicode character of the Latin-1 character <code class="code">c</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcode"></a>code : <code class="type"><a href="UChar.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">code u</code> returns the Unicode code number of <code class="code">u</code>.
+   If the value can not be represented by a positive integer,
+   raise Out_of_range<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALchr"></a>chr : <code class="type">int -> <a href="UChar.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">code n</code> returns the Unicode character with the code number <code class="code">n</code>. 
+   If n &gt;= 2^32 or n &lt; 0, raises <code class="code">invalid_arg</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALuint_code"></a>uint_code : <code class="type"><a href="UChar.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">uint_code u</code> returns the Unicode code number of <code class="code">u</code>.
+   The returned int is unsigned, that is, on 32-bit platforms,
+   the sign bit is used for storing the 31-th bit of the code number.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALchr_of_uint"></a>chr_of_uint : <code class="type">int -> <a href="UChar.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">chr_of_uint n</code> returns the Unicode character of the code number <code class="code">n</code>.
+   <code class="code">n</code> is interpreted as unsigned, that is, on 32-bit platforms,
+   the sign bit is treated as the 31-th bit of the code number.
+   If n exceeds 31-bit values, then raise <code class="code">Invalid_arg</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALunsafe_chr_of_uint"></a>unsafe_chr_of_uint : <code class="type">int -> <a href="UChar.html#TYPEt">t</a></code></pre><div class="info">
+Unsafe version of <a href="UChar.html#VALchr_of_uint"><code class="code">UChar.chr_of_uint</code></a>.
+   No check of its argument is performed.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALeq"></a>eq : <code class="type"><a href="UChar.html#TYPEt">t</a> -> <a href="UChar.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+Equality by code point comparison<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcompare"></a>compare : <code class="type"><a href="UChar.html#TYPEt">t</a> -> <a href="UChar.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">compare u1 u2</code> returns, 
+   a value &gt; 0 if <code class="code">u1</code> has a larger Unicode code number than <code class="code">u2</code>, 
+   0 if <code class="code">u1</code> and <code class="code">u2</code> are the same Unicode character,
+   a value &lt; 0 if <code class="code">u1</code> has a smaller Unicode code number than <code class="code">u2</code>.<br>
+</div>
+<pre><span class="keyword">type</span> <a name="TYPEuchar"></a><code class="type"></code>uchar = <code class="type"><a href="UChar.html#TYPEt">t</a></code> </pre>
+<div class="info">
+Aliases of <code class="code">type t</code><br>
+</div>
+
+<pre><span class="keyword">val</span> <a name="VALint_of_uchar"></a>int_of_uchar : <code class="type"><a href="UChar.html#TYPEuchar">uchar</a> -> int</code></pre><div class="info">
+Alias of <code class="code">uint_code</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALuchar_of_int"></a>uchar_of_int : <code class="type">int -> <a href="UChar.html#TYPEuchar">uchar</a></code></pre><div class="info">
+Alias of <code class="code">chr_of_uint</code><br>
+</div>
+</body></html>

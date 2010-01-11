@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="DynArray.html">
+<link rel="next" href="ExtArray.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of class methods" rel=Appendix href="index_methods.html">
+<link title="Index of classes" rel=Appendix href="index_classes.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Base64" rel="Chapter" href="Base64.html">
+<link title="BitSet" rel="Chapter" href="BitSet.html">
+<link title="Dllist" rel="Chapter" href="Dllist.html">
+<link title="DynArray" rel="Chapter" href="DynArray.html">
+<link title="Enum" rel="Chapter" href="Enum.html">
+<link title="ExtArray" rel="Chapter" href="ExtArray.html">
+<link title="ExtHashtbl" rel="Chapter" href="ExtHashtbl.html">
+<link title="ExtList" rel="Chapter" href="ExtList.html">
+<link title="ExtString" rel="Chapter" href="ExtString.html">
+<link title="Global" rel="Chapter" href="Global.html">
+<link title="IO" rel="Chapter" href="IO.html">
+<link title="OptParse" rel="Chapter" href="OptParse.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="PMap" rel="Chapter" href="PMap.html">
+<link title="RefList" rel="Chapter" href="RefList.html">
+<link title="Std" rel="Chapter" href="Std.html">
+<link title="UChar" rel="Chapter" href="UChar.html">
+<link title="UTF8" rel="Chapter" href="UTF8.html">
+<link title="Unzip" rel="Chapter" href="Unzip.html"><link title="Final functions" rel="Section" href="#6_Finalfunctions">
+<link title="Useful functions" rel="Section" href="#6_Usefulfunctions">
+<link title="Lazy constructors" rel="Section" href="#6_Lazyconstructors">
+<link title="Constructors" rel="Section" href="#6_Constructors">
+<link title="Counting" rel="Section" href="#6_Counting">
+<title>Enum</title>
+</head>
+<body>
+<div class="navbar"><a href="DynArray.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="ExtArray.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Enum.html">Enum</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Enum: <code class="code">sig</code> <a href="Enum.html">..</a> <code class="code">end</code></pre>Enumeration over abstract collection of elements.
+<p>
+
+ Enumerations are entirely functional and most of the operations do not
+ actually require the allocation of data structures. Using enumerations
+ to manipulate data is therefore efficient and simple. All data structures in
+ ExtLib such as lists, arrays, etc. have support to convert from and to
+ enumerations.<br>
+<hr width="100%">
+<pre><span class="keyword">type</span> <a name="TYPEt"></a><code class="type">'a</code> t </pre>
+
+<br>
+<a name="6_Finalfunctions"></a>
+<h6>Final functions</h6>
+<p>
+
+ These functions consume the enumeration until
+ it ends or an exception is raised by the first
+ argument function.<br>
+<pre><span class="keyword">val</span> <a name="VALiter"></a>iter : <code class="type">('a -> unit) -> 'a <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">iter f e</code> calls the function <code class="code">f</code> with each elements of <code class="code">e</code> in turn.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALiter2"></a>iter2 : <code class="type">('a -> 'b -> unit) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">iter2 f e1 e2</code> calls the function <code class="code">f</code> with the next elements of <code class="code">e</code> and
+ <code class="code">e2</code> repeatedly until one of the two enumerations ends.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfold"></a>fold : <code class="type">('a -> 'b -> 'b) -> 'b -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b</code></pre><div class="info">
+<code class="code">fold f v e</code> returns v if e is empty,
+  otherwise <code class="code">f (... (f (f v a1) a2) ...) aN</code> where a1..N are
+  the elements of <code class="code">e</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfold2"></a>fold2 : <code class="type">('a -> 'b -> 'c -> 'c) -> 'c -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a> -> 'c</code></pre><div class="info">
+<code class="code">fold2</code> is similar to <code class="code">fold</code> but will fold over two enumerations at the
+ same time until one of the two enumerations ends.<br>
+</div>
+<br>
+Indexed functions : these functions are similar to previous ones
+ except that they call the function with one additional argument which
+ is an index starting at 0 and incremented after each call to the function.<br>
+<pre><span class="keyword">val</span> <a name="VALiteri"></a>iteri : <code class="type">(int -> 'a -> unit) -> 'a <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALiter2i"></a>iter2i : <code class="type">(int -> 'a -> 'b -> unit) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALfoldi"></a>foldi : <code class="type">(int -> 'a -> 'b -> 'b) -> 'b -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b</code></pre><pre><span class="keyword">val</span> <a name="VALfold2i"></a>fold2i : <code class="type">(int -> 'a -> 'b -> 'c -> 'c) -> 'c -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a> -> 'c</code></pre><br>
+<a name="6_Usefulfunctions"></a>
+<h6>Useful functions</h6><br>
+<pre><span class="keyword">val</span> <a name="VALfind"></a>find : <code class="type">('a -> bool) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'a</code></pre><div class="info">
+<code class="code">find f e</code> returns the first element <code class="code">x</code> of <code class="code">e</code> such that <code class="code">f x</code> returns
+ <code class="code">true</code>, consuming the enumeration up to and including the
+ found element, or, raises <code class="code">Not_found</code> if no such element exists
+ in the enumeration, consuming the whole enumeration in the search.
+<p>
+
+ Since <code class="code">find</code> consumes a prefix of the enumeration, it can be used several 
+ times on the same enumeration to find the next element.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALis_empty"></a>is_empty : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">is_empty e</code> returns true if <code class="code">e</code> does not contains any element.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALpeek"></a>peek : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> 'a option</code></pre><div class="info">
+<code class="code">peek e</code> returns <code class="code">None</code> if <code class="code">e</code> is empty or <code class="code">Some x</code> where <code class="code">x</code> is
+ the next element of <code class="code">e</code>. The element is not removed from the enumeration.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALget"></a>get : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> 'a option</code></pre><div class="info">
+<code class="code">get e</code> returns <code class="code">None</code> if <code class="code">e</code> is empty or <code class="code">Some x</code> where <code class="code">x</code> is
+  the next element of <code class="code">e</code>, in which case the element is removed from the enumeration.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALpush"></a>push : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> 'a -> unit</code></pre><div class="info">
+<code class="code">push e x</code> will add <code class="code">x</code> at the beginning of <code class="code">e</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALjunk"></a>junk : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">junk e</code> removes the first element from the enumeration, if any.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALclone"></a>clone : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">clone e</code> creates a new enumeration that is copy of <code class="code">e</code>. If <code class="code">e</code>
+ is consumed by later operations, the clone will not get affected.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALforce"></a>force : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">force e</code> forces the application of all lazy functions and the
+ enumeration of all elements, exhausting the enumeration. 
+<p>
+
+  An efficient intermediate data structure
+  of enumerated elements is constructed and <code class="code">e</code> will now enumerate over
+  that data structure.<br>
+</div>
+<br>
+<a name="6_Lazyconstructors"></a>
+<h6>Lazy constructors</h6>
+<p>
+
+ These functions are lazy which means that they will create a new modified
+ enumeration without actually enumerating any element until they are asked
+ to do so by the programmer (using one of the functions above).
+<p>
+
+ When the resulting enumerations of these functions are consumed, the
+ underlying enumerations they were created from are also consumed.<br>
+<pre><span class="keyword">val</span> <a name="VALmap"></a>map : <code class="type">('a -> 'b) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">map f e</code> returns an enumeration over <code class="code">(f a1, f a2, ... , f aN)</code> where
+ a1...N are the elements of <code class="code">e</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmapi"></a>mapi : <code class="type">(int -> 'a -> 'b) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">mapi</code> is similar to <code class="code">map</code> except that <code class="code">f</code> is passed one extra argument
+ which is the index of the element in the enumeration, starting from 0.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfilter"></a>filter : <code class="type">('a -> bool) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">filter f e</code> returns an enumeration over all elements <code class="code">x</code> of <code class="code">e</code> such
+ as <code class="code">f x</code> returns <code class="code">true</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfilter_map"></a>filter_map : <code class="type">('a -> 'b option) -> 'a <a href="Enum.html#TYPEt">t</a> -> 'b <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">filter_map f e</code> returns an enumeration over all elements <code class="code">x</code> such as
+ <code class="code">f y</code> returns <code class="code">Some x</code> , where <code class="code">y</code> is an element of <code class="code">e</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALappend"></a>append : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> 'a <a href="Enum.html#TYPEt">t</a> -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">append e1 e2</code> returns an enumeration that will enumerate over all
+ elements of <code class="code">e1</code> followed by all elements of <code class="code">e2</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALconcat"></a>concat : <code class="type">'a <a href="Enum.html#TYPEt">t</a> <a href="Enum.html#TYPEt">t</a> -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">concat e</code> returns an enumeration over all elements of all enumerations
+ of <code class="code">e</code>.<br>
+</div>
+<br>
+<a name="6_Constructors"></a>
+<h6>Constructors</h6> 
+<p>
+
+ In this section the word <i>shall</i> denotes a semantic
+ requirement. The correct operation
+ of the functions in this interface are conditional
+ on the client meeting these requirements.<br>
+<pre><span class="keyword">exception</span> <a name="EXCEPTIONNo_more_elements"></a>No_more_elements</pre>
+<div class="info">
+This exception <i>shall</i> be raised by the <code class="code">next</code> function of <code class="code">make</code> 
+  or <code class="code">from</code> when no more elements can be enumerated, it <i>shall not</i>
+  be raised by any function which is an argument to any
+  other function specified in the interface.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALempty"></a>empty : <code class="type">unit -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+The empty enumeration : contains no element<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmake"></a>make : <code class="type">next:(unit -> 'a) -><br>       count:(unit -> int) -> clone:(unit -> 'a <a href="Enum.html#TYPEt">t</a>) -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+This function creates a fully defined enumeration.
+	<ul>
+<li>the <code class="code">next</code> function <i>shall</i> return the next element of the
+	enumeration or raise <code class="code">No_more_elements</code> if the underlying data structure
+	does not have any more elements to enumerate.</li>
+<li>the <code class="code">count</code> function <i>shall</i> return the actual number of remaining
+	elements in the enumeration.</li>
+<li>the <code class="code">clone</code> function <i>shall</i> create a clone of the enumeration
+	such as operations on the original enumeration will not affect the
+	clone. </li>
+</ul>
+
+<p>
+
+	For some samples on how to correctly use <code class="code">make</code>, you can have a look
+		at implementation of <code class="code">ExtList.enum</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfrom"></a>from : <code class="type">(unit -> 'a) -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">from next</code> creates an enumeration from the <code class="code">next</code> function.
+ <code class="code">next</code> <i>shall</i> return the next element of the enumeration or raise
+ <code class="code">No_more_elements</code> when no more elements can be enumerated. Since the
+ enumeration definition is incomplete, a call to <code class="code">clone</code> or <code class="code">count</code> will
+ result in a call to <code class="code">force</code> that will enumerate all elements in order to
+ return a correct value.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALinit"></a>init : <code class="type">int -> (int -> 'a) -> 'a <a href="Enum.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">init n f</code> creates a new enumeration over elements
+  <code class="code">f 0, f 1, ..., f (n-1)</code><br>
+</div>
+<br>
+<a name="6_Counting"></a>
+<h6>Counting</h6><br>
+<pre><span class="keyword">val</span> <a name="VALcount"></a>count : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">count e</code> returns the number of remaining elements in <code class="code">e</code> without
+  consuming the enumeration.
+<p>
+
+Depending of the underlying data structure that is implementing the
+enumeration functions, the count operation can be costly, and even sometimes
+can cause a call to <code class="code">force</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfast_count"></a>fast_count : <code class="type">'a <a href="Enum.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+For users worried about the speed of <code class="code">count</code> you can call the <code class="code">fast_count</code>
+    function that will give an hint about <code class="code">count</code> implementation. Basically, if
+    the enumeration has been created with <code class="code">make</code> or <code class="code">init</code> or if <code class="code">force</code> has
+    been called on it, then <code class="code">fast_count</code> will return true.<br>
+</div>
+</body></html>
