@@ -2,10 +2,12 @@ open Base
 open Str
 type t = {
   name : string;
+  path : string option;
   modules : string list
 }
 
 let name    = ref ""
+let path    = ref None
 let modules = ref []
 let configs = ref []
 
@@ -17,21 +19,28 @@ let chop s =
 
 let add_current () =
   if !name <> "" then
-    configs := { name = !name; modules = List.rev !modules } :: !configs;
+    configs := { name = !name; modules = List.rev !modules; path= !path } ::
+      !configs;
   name := "";
+  path := None;
   modules := []
 
+let r_package =
+  regexp "^- *\\(.*\\)$"
+
+let r_path =
+  regexp "^PATH *:: *\\(.*\\)$"
+
 let parse_line s =
-  let r =
-    regexp "^- *\\(.*\\)$"
-  in
-    if string_match r s 0 then begin
-      add_current ();
-      name := matched_group 1 s
-    end else if s = "" then
-      ()
-    else
-      modules := s :: !modules
+  if s = "" then
+    ()
+  else if string_match r_path s 0 then
+    path := Some (matched_group 1 s)
+  else if string_match r_package s 0 then begin
+    add_current ();
+    name := matched_group 1 s
+  end else
+    modules := s :: !modules
 
 let read path =
   configs := [];
