@@ -13,9 +13,14 @@ let find_package module_ configs =
   in
     config.Config.name
 
-let format configs x =
+let module_ =
+  function [] -> [""]
+    | [x] -> [x]
+    | xs -> HList.init xs
+
+let format configs {Search.id=id; kind=kind} =
   let kind, opt =
-    match x.Search.kind with
+    match kind with
 	Search.Value s ->
 	  "value",[ "type", String s]
       | Search.Type "" ->
@@ -24,7 +29,7 @@ let format configs x =
 	  "type",[ "is_abstract", Bool false;
 		   "type", String s ]
       | Search.Module ->
-	  "module",[]
+	  "module",["module_name", String (String.concat ~sep:"." id)]
       | Search.ModuleType ->
 	  "module_type",[]
       | Search.Class ->
@@ -34,9 +39,9 @@ let format configs x =
       | _ ->
 	  "", []
   in
-    ["module" , String (String.concat ~sep:"." x.Search.module_);
-     "name"   , String x.Search.name;
-     "package", String (find_package x.Search.module_ configs)]
+    ["module" , String (String.concat ~sep:"." @@ module_ id);
+     "name"   , String (HList.last id);
+     "package", String (find_package id configs)]
     @ List.map  ["value"; "type"; "module"; "module_type"; "class"; "class_type"]
       ~f:(fun x -> ("is_" ^ x, Bool (x = kind)))
     @ opt

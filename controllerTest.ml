@@ -34,8 +34,7 @@ let _ = begin "controller.ml" >::: [
       "module", String "String";
       "type", String "string -> string list -> string";
     ] @@ Controller.format config {
-      Search.name = "concat";
-      module_=["String"];
+      Search.id = ["String";"concat"];
       kind = Search.Value "string -> string list -> string"}
   end;
   "type" >:: begin fun () ->
@@ -52,8 +51,7 @@ let _ = begin "controller.ml" >::: [
       "is_abstract", Bool false;
       "type", String "string";
     ] @@ Controller.format config {
-      Search.name = "t";
-      module_=["String"];
+      Search.id = ["String";"t"];
       kind = Search.Type "string" };
   end;
   "abstract type" >:: begin fun () ->
@@ -69,8 +67,7 @@ let _ = begin "controller.ml" >::: [
       "module", String "String";
       "is_abstract", Bool true;
     ] @@ Controller.format config {
-      Search.name = "t";
-      module_=["String"];
+      Search.id = ["String";"t"];
       kind = Search.Type "" };
   end;
   "module" >:: begin fun () ->
@@ -84,10 +81,27 @@ let _ = begin "controller.ml" >::: [
       "name", String "String";
       "package", String "other package";
       "module", String "String";
+      "module_name", String "String";
     ]
     @@ Controller.format config {
-      Search.name = "String";
-      module_=["String"];
+      Search.id = ["String"];
+      kind = Search.Module }
+  end;
+  "nest module" >:: begin fun () ->
+    ok [
+      "is_value"      , Bool false;
+      "is_type"       , Bool false;
+      "is_module"     , Bool true;
+      "is_module_type", Bool false;
+      "is_class"      , Bool false;
+      "is_class_type" , Bool false;
+      "name", String "Foo";
+      "package", String "other package";
+      "module", String "String";
+      "module_name", String "String.Foo";
+    ]
+    @@ Controller.format config {
+      Search.id = ["String"; "Foo"];
       kind = Search.Module }
   end;
   "module type" >:: begin fun () ->
@@ -103,8 +117,7 @@ let _ = begin "controller.ml" >::: [
       "module", String "String";
     ]
     @@ Controller.format config {
-      Search.name = "String";
-      module_=["String"];
+      Search.id = ["String"];
       kind = Search.ModuleType }
   end;
   "class" >:: begin fun () ->
@@ -120,8 +133,7 @@ let _ = begin "controller.ml" >::: [
       "module", String "String";
     ]
     @@ Controller.format config {
-      Search.name = "String";
-      module_=["String"];
+      Search.id=["String"];
       kind = Search.Class }
   end;
   "class type" >:: begin fun () ->
@@ -137,8 +149,7 @@ let _ = begin "controller.ml" >::: [
       "module", String "String";
     ]
     @@ Controller.format config {
-      Search.name = "String";
-      module_=["String"];
+      Search.id=["String"];
       kind = Search.ClassType }
   end;
   "pagenation(first)" >:: begin fun () ->
