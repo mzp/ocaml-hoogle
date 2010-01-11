@@ -10,7 +10,15 @@ let rec to_var = function
     Controller.String s ->
       Template.VarString s
   | Controller.Bool b ->
-      Template.VarConditional b
+       Template.VarConditional b
+  | Controller.Table rows ->
+      Template.VarTable begin
+	List.map rows ~f:begin fun row ->
+	  List.map row ~f:begin fun (name, cell) ->
+	    (name, to_var cell)
+	  end
+	end
+      end
 
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
