@@ -19,7 +19,7 @@
     </form>
   </div>
 
-  <p class="target">Searching for ::query_html::.</p>
+  <p class="target">Results <em>::from::</em> - <em>::to::</em> of <em>::count_html::</em> for <em>::query_html::</em>.</p>
 
   <table>
 ::if(found)::
@@ -66,9 +66,33 @@
   </tr>
   ::end::
 ::else::
-  <p>no such result</p>
+  <p class="error">no such result</p>
 ::end::
   </table>
+
+  <div class="navigation">
+    <div class="prev">
+::if(is_prev)::
+    <a href="/?q=::query_html_tag::&o=::prev_offset_html_tag::">Prev</a>
+::end::
+    </div>
+
+    <ul class="jump">
+::table(navigation)::
+  ::if(is_current)::
+    <li class="current">::number_html::</li>
+  ::else::
+    <li><a href="/?q=::query_html_tag::&o=::offset_html_tag::">::number_html::</a></li>
+  ::end::
+::end::
+    </ul>
+
+    <div class="next">
+::if(is_next)::
+    <a href="/?q=::query_html_tag::&o=::next_offset_html_tag::">Next</a>
+::end::
+    </div>
+  </div>
 
   <script type="text/javascript"><!--
 google_ad_client = "pub-8989402149590911";

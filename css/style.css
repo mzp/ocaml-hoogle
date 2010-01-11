@@ -98,3 +98,43 @@ p.target {
 	 padding: 5px;
 	 font-size:14px;
 }
+
+div.navigation {
+       font-size:14px;
+       margin-bottom:30px;
+}
+
+div.navigation div {
+	 display:inline-block;
+}
+
+div.navigation a {
+	       text-decoration: none;
+}
+
+ul.jump {
+	 display:inline-block;
+}
+
+ul.jump li {
+	 display: inline-block;
+	 width: 25px;
+	 text-align: center;
+	 border:1px solid #808080;
+	 padding-top:3px;
+	 padding-bottom:3px;
+}
+
+ul.jump li.current, ul.jump li:hover {
+	border-color: #4096EE;
+	background-color: #C3D9FF;
+}
+
+em {
+   font-weight: bold;
+   font-style: normal;
+}
+
+iframe {
+       border: 1px solid black;
+}
