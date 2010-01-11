@@ -41,5 +41,42 @@ let format configs x =
       ~f:(fun x -> ("is_" ^ x, Bool (x = kind)))
     @ opt
 
-let pagenation ~offset ~window _ =
-  assert false
+let int n =
+  String (string_of_int n)
+
+let pagenation ~offset ~window xs =
+  let count =
+    List.length xs
+  in
+  let from =
+    max 0 offset
+  in
+  let to_ =
+    min count (offset+window)
+  in
+    List.concat [
+      ["from" , int @@ from + 1;
+       "to"   , int @@ to_;
+       "count", int @@ count];
+      if to_ < count then
+	["is_next", Bool true;
+	 "next_offset", int to_]
+       else
+	["is_next", Bool false];
+      if 0 < from then
+	["is_prev", Bool true;
+	 "prev_offset", int @@ from - window]
+      else
+	["is_prev", Bool false];
+      ["navigation", Table (
+	 List.map (range 0 (count / window)) ~f:begin fun i ->
+	   if i*window <= offset && offset < (i+1)*window then
+	     ["is_current", Bool true;
+	      "number", int @@ i+1]
+	   else
+	     ["is_current", Bool false;
+	      "number", int @@ i+1;
+	      "offset", int @@ i*window]
+	 end
+       )]
+    ], HList.take window @@ HList.drop offset xs
