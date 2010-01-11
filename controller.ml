@@ -84,3 +84,15 @@ let pagenation ~offset ~window xs =
 	 end
        )]
     ], HList.take window @@ HList.drop offset xs
+
+let available configs =
+  Table begin
+    List.map configs ~f:begin fun { Config.name = name; modules = modules} ->
+      ["package", String name;
+       "modules", Table begin
+	 List.map modules ~f:begin fun s ->
+	   ["name", String s]
+	 end
+       end ]
+    end
+  end

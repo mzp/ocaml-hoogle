@@ -208,5 +208,15 @@ let _ = begin "controller.ml" >::: [
 	opt;
       assert_equal (range 20 30) xs
   end;
-
+  "available" >:: begin fun () ->
+    assert_equal (Table [
+		    ["package", String "some package";
+		     "modules", Table [
+		       ["name", String "A"];
+		       ["name", String "B"] ] ];
+		    ["package", String "other package";
+		     "modules", Table [
+		       ["name", String "String"] ]]]) @@
+      available config
+  end
 ] end +> run_test_tt_main
