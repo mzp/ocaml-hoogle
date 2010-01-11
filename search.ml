@@ -12,8 +12,7 @@ type kind =
   | Other
 
 type t = {
-  module_ : string list;
-  name    : string;
+  id : string list;
   kind    : kind
 }
 
@@ -108,22 +107,15 @@ let to_result (id, kind) =
   let id' =
     Longident.flatten id
   in
-  let module_ xs =
-    match xs with
-	[]  -> []
-      | [x] -> [x]
-      |  _  -> HList.init xs
-  in
   let t =
     {
-      module_ = module_ id';
-      name    = HList.last id';
+      id = id';
       kind = Other
     }
   in
     match kind with
 	Searchid.Pvalue ->
-	  { t with kind = Value (string_of_value id); name = infix t.name}
+	  {kind = Value (string_of_value id); id = List.map ~f:infix id'}
       | Searchid.Ptype ->
 	  { t with kind = Type (string_of_type id) }
       | Searchid.Pmodule ->

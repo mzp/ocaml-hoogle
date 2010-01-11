@@ -12,32 +12,29 @@ let _ = begin "search.ml" >::: [
     ok [] @@ search "" [] []
   end;
   "value" >:: begin fun () ->
-    ok [{name = "concat";
-	 module_=["String"];
+    ok [{id = ["String";"concat"];
 	 kind = Value "string -> string list -> string"}] @@
       search "concat" ["String"] []
   end;
   "nest module" >:: begin fun () ->
-    ok [{name = "concat";
-	 module_=["StdLabels";"String"];
+    ok [{id=["StdLabels";"String";"concat"];
 	 kind = Value "sep:string -> string list -> string"}] @@
       search "string list -> string" ["StdLabels"] []
   end;
   "type" >:: begin fun () ->
-    ok {name = "t"; module_=["String"]; kind = Type "string"} @@
+    ok {id=["String"; "t"]; kind = Type "string"} @@
       List.nth (search "t" ["String"] []) 1
   end;
   "module" >:: begin fun () ->
-    ok [{name = "String"; module_=["String"]; kind = Module}] @@
+    ok [{id=["String"]; kind = Module}] @@
       search "String" ["String"] []
   end;
   "module sig" >:: begin fun () ->
-    ok [{name = "S"; module_=["Set"]; kind = ModuleType}] @@
+    ok [{id=["Set";"S"]; kind = ModuleType}] @@
       search "S" ["Set"] []
   end;
   "external" >:: begin fun () ->
-    ok [{name = "dump";
-	 module_=["Std"];
+    ok [{id=["Std";"dump"];
 	 kind = Value "'a -> string"}] @@
       search "dump" ["Std"] [path]
   end;

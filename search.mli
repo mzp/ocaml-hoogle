@@ -8,8 +8,7 @@ type kind =
   | Other
 
 type t = {
-  module_ : string list;
-  name    : string;
+  id : string list;
   kind    : kind
 }
 
