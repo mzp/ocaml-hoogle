@@ -4,6 +4,10 @@ h1,h2,ul,ol,li,p,html,body,address{
 	padding:0;
 }
 
+a img {
+  border:none;
+}
+
 h1 {
      text-align: center;
 }
