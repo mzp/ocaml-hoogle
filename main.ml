@@ -44,9 +44,19 @@ let safe_int_of_string s =
 let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
 
+let configs () =
+  Config.read "modules.txt"
+
+let available_page (cgi : cgi) =
+  let t =
+    template "templates/available.html"
+  in
+    set t ("available", (Controller.available @@ configs ()));
+    cgi#template t
+
 let search_page (cgi : cgi) =
   let configs =
-    Config.read "modules.txt"
+    configs ()
   in
   let modules =
     HList.concat_map (fun {Config.modules=m} -> m) configs
@@ -82,6 +92,8 @@ let _ =
       q#header ~content_type:"text/html; charset=utf-8" ();
       if q#param_exists "q" then
 	search_page q
+      else if q#param_exists "available" then
+	available_page q
       else
 	index_page q
   end

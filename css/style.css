@@ -1,4 +1,4 @@
-h1,h2,ul,ol,li,p,html,body,address{
+h1,h2,h3,ul,ol,li,p,html,body,address{
 	margin:0;
 	border:0;
 	padding:0;
@@ -137,4 +137,8 @@ em {
 
 iframe {
        border: 1px solid black;
+}
+
+ul.available-modules li {
+       display: inline;
 }
