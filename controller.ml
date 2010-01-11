@@ -40,3 +40,6 @@ let format configs x =
     @ List.map  ["value"; "type"; "module"; "module_type"; "class"; "class_type"]
       ~f:(fun x -> ("is_" ^ x, Bool (x = kind)))
     @ opt
+
+let pagenation ~offset ~window _ =
+  assert false

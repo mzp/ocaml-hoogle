@@ -1,10 +1,19 @@
 open Base
 open OUnit
 open Controller
+open StdLabels
 
-let sort xs = List.sort (fun x y -> compare (fst x) (fst y)) xs
+let rec sort xs =
+  List.sort xs ~cmp:(fun (x,_) (y,_) -> compare x y)
+  +> List.map ~f:begin fun (name,x) ->
+    match x with
+	Table xs ->
+	  (name,Table (List.map ~f:sort xs))
+      | _ ->
+	  (name,x)
+  end
 
-let ok x y = assert_equal (sort x) (sort y)
+let ok x y = assert_equal ~printer:(fun xs -> String.concat ~sep:"\n" @@ List.map ~f:Std.dump xs) (sort x) (sort y)
 
 let config = [
   { Config.name = "some package"; modules = ["A"; "B"]};
@@ -132,4 +141,72 @@ let _ = begin "controller.ml" >::: [
       module_=["String"];
       kind = Search.ClassType }
   end;
+  "pagenation(first)" >:: begin fun () ->
+    let opt,xs =
+      pagenation ~offset:0 ~window:10 @@ range 0 30 in
+      ok ["from", String "1";
+	  "to"  , String "10";
+	  "count", String "30";
+	  "is_next", Bool true;
+	  "next_offset", String "10";
+	  "is_prev", Bool false;
+	  "navigation", Table [
+	    ["is_current", Bool true;
+	     "number", String "1"];
+	    ["is_current", Bool false;
+	     "number", String "2";
+	     "offset", String "10"];
+	    ["is_current", Bool false;
+	     "number", String "3";
+	     "offset", String "20"]
+	  ]]
+	opt;
+      assert_equal (range 0 10) xs
+  end;
+  "pagenation(middle)" >:: begin fun () ->
+    let opt,xs =
+      pagenation ~offset:10 ~window:10 @@ range 0 30 in
+      ok ["from", String "11";
+	  "to"  , String "20";
+	  "count", String "30";
+	  "is_next", Bool true;
+	  "next_offset", String "20";
+	  "is_prev", Bool true;
+	  "prev_offset", String "0";
+	  "navigation", Table [
+	    ["is_current", Bool false;
+	     "number", String "1";
+	     "offset",String "0"];
+	    ["is_current", Bool true;
+	     "number", String "2"];
+	    ["is_current", Bool false;
+	     "number", String "3";
+	     "offset", String "20"]
+	  ]]
+	opt;
+      assert_equal (range 10 20) xs
+  end;
+  "pagenation(last)" >:: begin fun () ->
+    let opt,xs =
+      pagenation ~offset:20 ~window:10 @@ range 0 30 in
+      ok ["from", String "21";
+	  "to"  , String "30";
+	  "count", String "30";
+	  "is_next", Bool false;
+	  "is_prev", Bool true;
+	  "prev_offset", String "10";
+	  "navigation", Table [
+	    ["is_current", Bool false;
+	     "number", String "1";
+	     "offset",String "0"];
+	    ["is_current", Bool false;
+	     "number", String "2";
+	     "offset", String "10"];
+	    ["is_current", Bool true;
+	     "number", String "3"]
+	  ]]
+	opt;
+      assert_equal (range 20 30) xs
+  end;
+
 ] end +> run_test_tt_main

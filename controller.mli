@@ -4,3 +4,4 @@ type t =
   | Table  of (string * t) list list
 
 val format : Config.t list -> Search.t -> (string * t) list
+val pagenation : offset:int -> window:int -> 'a list -> (string * t) list * 'a list
