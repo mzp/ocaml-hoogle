@@ -2,6 +2,7 @@
 
 cat <<EOF > modules.txt
 - stdlib
+PATH:: `ocamlfind query threads.posix`
 Pervasives
 Arg
 Array
@@ -42,6 +43,17 @@ String
 StringLabels
 Sys
 Weak
+Unix
+UnixLabels
+Num
+Big_int
+Arith_status
+Str
+Thread
+Mutex
+Condition
+Event
+ThreadUnix
 - extlib
 PATH:: `ocamlfind query extlib`
 IO
