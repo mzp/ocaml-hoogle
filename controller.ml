@@ -45,6 +45,9 @@ let int n =
   String (string_of_int n)
 
 let pagenation ~offset ~window xs =
+  let window =
+    max 0 window
+  in
   let count =
     List.length xs
   in
@@ -69,7 +72,8 @@ let pagenation ~offset ~window xs =
       else
 	["is_prev", Bool false];
       ["navigation", Table (
-	 List.map (range 0 (count / window)) ~f:begin fun i ->
+	 List.map (range 0 (int_of_float @@ ceil @@ (float_of_int count) /. (float_of_int window)))
+	   ~f:begin fun i ->
 	   if i*window <= offset && offset < (i+1)*window then
 	     ["is_current", Bool true;
 	      "number", int @@ i+1]
