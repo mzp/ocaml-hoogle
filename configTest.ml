@@ -7,6 +7,7 @@ let _ =
     output_string ch "- some package\n";
     output_string ch "A\n";
     output_string ch "B\n";
+    output_string ch "\n";
     output_string ch "- other package\n";
     output_string ch "C\n"
   end

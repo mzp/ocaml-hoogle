@@ -28,7 +28,9 @@ let parse_line s =
     if string_match r s 0 then begin
       add_current ();
       name := matched_group 1 s
-    end else
+    end else if s = "" then
+      ()
+    else
       modules := s :: !modules
 
 let read path =
