@@ -136,7 +136,10 @@ let lift f s =
 
 let search s modules paths =
   init modules paths;
-  lift (Searchid.search_string_type ~mode:`Included) s
-  @ lift Searchid.search_string_symbol  s
+  List.rev @@
+    ExtList.List.unique @@
+    List.rev @@
+    lift (Searchid.search_string_type ~mode:`Exact) s
+  @ lift (Searchid.search_string_type ~mode:`Included) s
   @ lift Searchid.search_pattern_symbol s
 
