@@ -27,12 +27,14 @@ module Toploop = struct
        may have added to load_path. *)
     load_path := !load_path @ [Filename.concat Config.standard_library "camlp4"];
     load_path := "" :: (List.rev !Clflags.include_dirs @ !load_path);
-    Dll.add_path !load_path
+    Dll.add_path !load_path;
+List.iter (fun p -> prerr_endline ("XXX Toploop " ^ p)) !load_path
 end
 
 module Topdirs = struct
   open Misc
   let dir_directory s =
+prerr_endline ("XXX Topdirs " ^ s);
     let d = expand_directory Config.standard_library s in
     Config.load_path := d :: !Config.load_path;
     Dll.add_path [d]
@@ -42,7 +44,8 @@ let init modules paths =
   (* initialize *)
   Toploop.set_paths ();
   List.iter ~f:Topdirs.dir_directory paths;
-  Searchid.module_list := modules @ init_modules
+  Searchid.module_list := modules @ init_modules;
+List.iter (fun x -> prerr_endline ("XXX module " ^ x)) !Searchid.module_list
 
 let sure f x =
   try
@@ -154,7 +157,7 @@ let lift f s =
   +> List.map ~f:to_result
 
 let search s modules paths =
-  init modules paths;
+  init modules paths; (* CR jfuruse: multiple calls of [search] accumulates load paths and others *) 
   List.rev @@
     ExtList.List.unique @@
     List.rev @@

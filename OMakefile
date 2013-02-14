@@ -72,8 +72,8 @@ OUNIT_LIBS[] =
 	base
 	hList
 
-OUnitTest(config, config)
-OUnitTest(search, search config searchid list2)
+OUnitTest(config, chconfig)
+OUnitTest(search, search chconfig searchid list2)
 OUnitTest(controller, controller)
 
 ########################################################################

@@ -2,7 +2,7 @@
 
 cat <<EOF > modules.txt
 - stdlib
-PATH:: `ocamlfind query threads.posix`
+PATH:: `ocamlfind query unix`
 Pervasives
 Arg
 Array
