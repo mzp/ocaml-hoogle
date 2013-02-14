@@ -21,10 +21,12 @@ let _ = begin "search.ml" >::: [
 	 kind = Value "sep:string -> string list -> string"}] @@
       search "string list -> string" ["StdLabels"] []
   end;
+  (* CR jfuruse: We fail here *)
   "type" >:: begin fun () ->
     ok {id=["String"; "t"]; kind = Type "string"} @@
       List.nth (search "t" ["String"] []) 1
   end;
+  (* CR jfuruse: We fail here *)
   "module" >:: begin fun () ->
     ok [{id=["String"]; kind = Module}] @@
       search "String" ["String"] []

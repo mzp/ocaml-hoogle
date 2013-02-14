@@ -1,6 +1,6 @@
 (*************************************************************************)
 (*                                                                       *)
-(*                Objective Caml LablTk library                          *)
+(*                         OCaml LablTk library                          *)
 (*                                                                       *)
 (*            Jacques Garrigue, Kyoto University RIMS                    *)
 (*                                                                       *)
@@ -12,7 +12,7 @@
 (*                                                                       *)
 (*************************************************************************)
 
-(* $Id: list2.ml,v 1.9 2001/12/07 13:40:00 xleroy Exp $ *)
+(* $Id: list2.ml 11156 2011-07-27 14:17:02Z doligez $ *)
 
 open StdLabels
 

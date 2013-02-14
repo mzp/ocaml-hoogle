@@ -21,7 +21,20 @@ let init_modules =
 
 module Toploop = struct
   open Config
+  open Misc
+
+let init_path () =
+  let dirs =
+    if !Clflags.use_threads then "+threads" :: !Clflags.include_dirs
+    else if !Clflags.use_vmthreads then "+vmthreads" :: !Clflags.include_dirs
+    else !Clflags.include_dirs in
+  let exp_dirs =
+    List.map (expand_directory Config.standard_library) dirs in
+  load_path := "" :: List.rev_append exp_dirs (Clflags.std_include_dir ());
+  Env.reset_cache ()
+
   let set_paths () =
+    init_path ();
     (* Add whatever -I options have been specified on the command line,
        but keep the directories that user code linked in with ocamlmktop
        may have added to load_path. *)
@@ -157,7 +170,10 @@ let lift f s =
   +> List.map ~f:to_result
 
 let search s modules paths =
-  init modules paths; (* CR jfuruse: multiple calls of [search] accumulates load paths and others *) 
+  (* CR jfuruse: multiple calls of [search] accumulates load paths and others.
+     In CGI multiple searches cannot happen, but in test, possible.
+  *) 
+  init modules paths; 
   List.rev @@
     ExtList.List.unique @@
     List.rev @@
