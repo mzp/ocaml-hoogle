@@ -19,6 +19,25 @@ type t = {
 let init_modules =
   !Searchid.module_list
 
+module Toploop = struct
+  open Config
+  let set_paths () =
+    (* Add whatever -I options have been specified on the command line,
+       but keep the directories that user code linked in with ocamlmktop
+       may have added to load_path. *)
+    load_path := !load_path @ [Filename.concat Config.standard_library "camlp4"];
+    load_path := "" :: (List.rev !Clflags.include_dirs @ !load_path);
+    Dll.add_path !load_path
+end
+
+module Topdirs = struct
+  open Misc
+  let dir_directory s =
+    let d = expand_directory Config.standard_library s in
+    Config.load_path := d :: !Config.load_path;
+    Dll.add_path [d]
+end
+
 let init modules paths =
   (* initialize *)
   Toploop.set_paths ();
@@ -45,8 +64,8 @@ let string_of_sign sign =
 let string_of_value id =
   let name =
     match id with
-	Longident.Lident x -> x
-      | Longident.Ldot (_, x) -> x
+	Longident.Lident x -> x 
+     | Longident.Ldot (_, x) -> x
       | _ -> "z"
   in
   let _, vd =
@@ -54,14 +73,14 @@ let string_of_value id =
   in
     Str.replace_first (Str.regexp "=[^=]*$") "" @@
       Str.replace_first (Str.regexp "^[^:]*: *") ""
-      (string_of_sign [Types.Tsig_value (Ident.create name, vd)])
+      (string_of_sign [Types.Sig_value (Ident.create name, vd)])
 
 let ident_of_path ~default = function
     Path.Pident i -> i
   | Path.Pdot (_, s, _) -> Ident.create s
   | Path.Papply _ -> Ident.create default
 
-let dummy_item = Tsig_modtype (Ident.create "dummy", Tmodtype_abstract)
+let dummy_item = Sig_modtype (Ident.create "dummy", Modtype_abstract)
 
 let string_of_type_decl path =
   let td =
@@ -78,12 +97,12 @@ let string_of_type_decl path =
 		      clt = Env.find_cltype path !Searchid.start_env
 		  in
 		    string_of_sign
-		      [Tsig_cltype (ident_of_path path ~default:"ct", clt, Trec_first);
+		      [Sig_class_type (ident_of_path path ~default:"ct", clt, Trec_first);
 		       dummy_item; dummy_item]
 	      | _ -> raise Not_found
     with Not_found ->
       string_of_sign
-	[Tsig_type(ident_of_path path ~default:"t", td, Trec_first)]
+	[Sig_type(ident_of_path path ~default:"t", td, Trec_first)]
 
 let string_of_type id =
   let strip s =

@@ -5,21 +5,21 @@ OCAMLPACKS[] =
     extlib
     CamlGI
     str
-
+    compiler-libs.bytecomp
 if $(not $(OCAMLFIND_EXISTS))
     eprintln('This project requires ocamlfind, but is was not found.')
     eprintln('You need to install ocamlfind and run "omake --configure".')
     exit 1
 
-OCAMLFLAGS    += -dtypes -g -thread
+OCAMLFLAGS    += -dtypes -g -thread -w A-4-9 -warn-error A-4-6-9-27-31-33
 OCAMLINCLUDES += ../parsing
 OCAMLINCLUDES += ../typing
 
-NATIVE_ENABLED = false
+NATIVE_ENABLED = true
 BYTE_ENABLED = true
 
 FILES[] =
-    config
+    chconfig
     controller
     hList
     list2
@@ -32,7 +32,7 @@ PROGRAM = index.cgi
 
 # OCAML_LIBS +=
 # OCAML_CLIBS +=
-OCAML_OTHER_LIBS += toplevellib
+# OCAML_OTHER_LIBS += toplevellib
 # OCAML_LIB_FLAGS +=
 #
 

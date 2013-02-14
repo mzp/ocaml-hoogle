@@ -45,7 +45,7 @@ let index_page (cgi : cgi) =
   cgi#template @@ template "templates/index.html"
 
 let configs () =
-  Config.read "modules.txt"
+  Chconfig.read "modules.txt"
 
 let available_page (cgi : cgi) =
   let t =
@@ -59,10 +59,10 @@ let search_page (cgi : cgi) =
     configs ()
   in
   let modules =
-    HList.concat_map (fun {Config.modules=m} -> m) configs
+    HList.concat_map (fun {Chconfig.modules=m} -> m) configs
   in
   let paths =
-    filter_map (fun {Config.path=p} -> p) configs
+    filter_map (fun {Chconfig.path=p} -> p) configs
   in
   let page, content =
     Search.search (cgi#param "q") modules paths
