@@ -166,12 +166,11 @@ let to_result (id, kind) =
 
 let raw_search s modules paths =
   init modules paths; 
-  sure (Searchid.search_string_type ~mode:`Exact) s
+  List.rev @@ ExtList.List.unique  @@ List.rev (* unique removes first appearances *)
+  @@ sure (Searchid.search_string_type ~mode:`Exact) s
   @ sure (Searchid.search_string_type ~mode:`Included) s
   @ sure Searchid.search_pattern_symbol s
 
 let search s modules paths =
-  List.rev 
-  @@ ExtList.List.unique 
-  @@ List.rev_map ~f:to_result 
+  List.map ~f:to_result 
   @@ raw_search s modules paths
