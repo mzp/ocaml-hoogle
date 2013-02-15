@@ -44,3 +44,14 @@ val open_out_with : string -> (out_channel -> 'a) -> 'a
 val open_in_with : string -> (in_channel -> 'a) -> 'a
 val undefined : 'a
 val undef : 'a
+
+val format_list : 
+  (unit, Format.formatter, unit) format 
+  -> (Format.formatter -> 'a -> unit) 
+  -> Format.formatter -> 'a list -> unit
+(** Format for lists *)
+
+val format_ocaml_list : 
+  (Format.formatter -> 'a -> unit) 
+  -> Format.formatter -> 'a list -> unit
+(** Format for lists in OCaml style [ a; b; ... ] *)

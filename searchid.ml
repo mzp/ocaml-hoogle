@@ -377,7 +377,12 @@ let search_pattern_symbol text =
           | _ -> []
           end
     | _ -> []
-    with Env.Error _ -> []
+    with Env.Error _ ->
+      Format.eprintf "Error: lookup_module %s failed@." modname;
+      []
+    | Not_found ->
+      Format.eprintf "Error: search_pattern_symbol raised Not_found for %s@." modname;
+      []
     end
   in
   List2.flat_map l ~f:

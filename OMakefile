@@ -1,3 +1,5 @@
+.PHONY: clean all
+
 USE_OCAMLFIND = true
 
 OCAMLPACKS[] =
@@ -18,7 +20,7 @@ OCAMLINCLUDES += ../typing
 NATIVE_ENABLED = true
 BYTE_ENABLED = true
 
-FILES[] =
+CGI_FILES[] =
     chconfig
     controller
     hList
@@ -28,7 +30,23 @@ FILES[] =
     base
     main
 
-PROGRAM = index.cgi
+CGI_PROGRAM = index.cgi
+
+all:: $(OCamlProgram $(CGI_PROGRAM), $(CGI_FILES)) 
+
+CLI_FILES[] =
+    chconfig
+    controller
+    hList
+    list2
+    searchid
+    search
+    base
+    cli
+
+CLI_PROGRAM = ocamlas
+
+all:: $(OCamlProgram $(CLI_PROGRAM), $(CLI_FILES)) 
 
 # OCAML_LIBS +=
 # OCAML_CLIBS +=
@@ -36,15 +54,13 @@ PROGRAM = index.cgi
 # OCAML_LIB_FLAGS +=
 #
 
-.PHONY: clean all
-
-all: $(OCamlProgram $(PROGRAM), $(FILES)) modules.txt
+all:: modules.txt
 
 modules.txt : modules-init.sh
 	./modules-init.sh
 
 clean:
-	rm -f *.cm[oix] *.o *.omc  $(PROGRAM) *.run *~ *.annot
+	rm -f *.cm* *.o *.omc  $(CGI_PROGRAM) $(CLI_PROGRAM) *.run *.opt *~ *.annot *Test-runner
 
 .DEFAULT: all
 

@@ -128,3 +128,17 @@ let open_in_with path f =
 
 let undefined =  Obj.magic 42
 let undef     = undefined
+
+let rec format_list (sep : (unit, Format.formatter, unit) format)  f ppf = function
+  | [] -> ()
+  | [x] -> f ppf x
+  | x::xs -> 
+      Format.fprintf ppf "@[%a@]%t%a" 
+	f x
+	(fun ppf -> Format.fprintf ppf sep)
+	(format_list sep f) xs
+
+let format_ocaml_list f ppf xs =
+  Format.fprintf ppf "[ @[%a@] ]"
+    (format_list ";@ " f) xs
+
