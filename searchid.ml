@@ -328,6 +328,9 @@ let search_string_type text ~mode =
     let sexp = Parse.interface (Lexing.from_string ("val z : " ^ text)) in
     let sign =
       try (Typemod.transl_signature !start_env sexp).sig_type with _ ->
+      (* CR jfuruse: No open of nested modules?
+         A.B.t cannot be found by "t".
+      *)
       let env = List.fold_left !module_list ~init:initial ~f:
         begin fun acc m ->
           try open_pers_signature m acc with Env.Error _ -> acc
@@ -423,10 +426,10 @@ let search_pattern_symbol text =
     | _ -> []
     with 
     | Env.Error _ ->
-        Format.eprintf "Warning: lookup_module %s failed@." modname;
+        Format.eprintf "Warning: lookup_module %s failed. Check the library.@." modname;
         []
     | Not_found ->
-        Format.eprintf "Error: module %s was not found. Check modules.txt@." modname;
+        Format.eprintf "Error: module %s was not found. Check modules.txt.@." modname;
         assert false
     end
   in
