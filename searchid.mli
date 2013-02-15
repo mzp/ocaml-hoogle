@@ -14,6 +14,18 @@
 
 (* $Id: searchid.mli,v 1.6 2002/07/25 22:51:47 garrigue Exp $ *)
 
+module Stat : sig
+  (** search statistics *)
+  type t = {
+    type_included : int;
+    type_exact : int;
+    symbol : int;
+    time : float;
+  }
+  val format : Format.formatter -> t -> unit
+  val get : ('a -> 'b) -> 'a -> [> `Error of exn | `Ok of 'b ] * t
+end
+
 val start_env : Env.t ref
 val module_list : string list ref
 val longident_of_path :  Path.t ->Longident.t

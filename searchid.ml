@@ -25,6 +25,46 @@ open Env
 open Btype
 open Ctype
 
+module Stat = struct
+  (** search statistics *)
+  let type_included = ref 0
+  let type_exact = ref 0
+  let symbol = ref 0
+
+  let reset () = 
+    type_included := 0;
+    type_exact := 0;
+    symbol := 0;
+    ()
+
+  type t = { 
+    type_included : int;
+    type_exact : int;
+    symbol : int;
+    time : float
+  }
+
+  let format ppf t = 
+    Format.fprintf ppf "%d type checks (inclusion: %d, exact: %d), %d symbol checks (%0.2f secs)"
+      (t.type_included + t.type_exact)
+      t.type_included 
+      t.type_exact 
+      t.symbol
+      t.time
+
+  let get f v =
+    reset ();
+    let start = Unix.gettimeofday () in
+    let res = try `Ok (f v) with e -> `Error e in
+    let end_ = Unix.gettimeofday () in
+    res, { type_included = !type_included;
+           type_exact = !type_exact;
+           symbol = !symbol;
+           time = end_ -. start
+         }
+
+end
+
 (* only initial here, but replaced by Pervasives later *)
 let start_env = ref initial
 let module_list = ref []
@@ -214,8 +254,8 @@ let get_fields ~prefix ~sign self =
 
 let rec search_type_in_signature t ~sign ~prefix ~mode =
   let matches = match mode with
-        `Included -> included t ~prefix
-      | `Exact -> equal t ~prefix
+        `Included -> incr Stat.type_included; included t ~prefix
+      | `Exact -> incr Stat.type_exact; equal t ~prefix
   and lid_of_id id = mklid (prefix @ [Ident.name id]) in
   List2.flat_map sign ~f:
   begin fun item -> match item with
@@ -349,6 +389,10 @@ let rec check_match ~pattern s =
   | x::l, y::l' when x == y -> check_match ~pattern:l l'
   | _ -> false
 
+let check_match ~pattern s =
+  incr Stat.symbol;
+  check_match ~pattern s
+
 let search_pattern_symbol text =
   if text = "" then [] else
   let pattern = explode text in
@@ -377,12 +421,13 @@ let search_pattern_symbol text =
           | _ -> []
           end
     | _ -> []
-    with Env.Error _ ->
-      Format.eprintf "Error: lookup_module %s failed@." modname;
-      []
+    with 
+    | Env.Error _ ->
+        Format.eprintf "Warning: lookup_module %s failed@." modname;
+        []
     | Not_found ->
-      Format.eprintf "Error: search_pattern_symbol raised Not_found for %s@." modname;
-      []
+        Format.eprintf "Error: module %s was not found. Check modules.txt@." modname;
+        assert false
     end
   in
   List2.flat_map l ~f:

@@ -74,19 +74,20 @@ let string_of_sign sign =
     Format.pp_print_flush ppf ();
     Buffer.contents b
 
+(* CR jfuruse: We can get vd.val_type and print it *)
 let string_of_value id =
   let name =
     match id with
-	Longident.Lident x -> x 
-     | Longident.Ldot (_, x) -> x
-      | _ -> "z"
+    | Longident.Lident x -> x 
+    | Longident.Ldot (_, x) -> x
+    | _ -> "z"
   in
   let _, vd =
     Env.lookup_value id !Searchid.start_env
   in
-    Str.replace_first (Str.regexp "=[^=]*$") "" @@
-      Str.replace_first (Str.regexp "^[^:]*: *") ""
-      (string_of_sign [Types.Sig_value (Ident.create name, vd)])
+  Str.replace_first (Str.regexp "=[^=]*$") ""  (* remove equality of external *)
+  @@ Str.replace_first (Str.regexp "^[^:]*: *") "" (* remove "val id :" "exteranl id :" *)
+    (string_of_sign [Types.Sig_value (Ident.create name, vd)])
 
 let ident_of_path ~default = function
     Path.Pident i -> i
@@ -129,6 +130,7 @@ let string_of_type id =
     strip @@ string_of_type_decl path
 
 
+(** Wrap infix/perfix operators with "(" and ")" *)
 let infix s =
   if Str.string_match (Str.regexp "[!$%&*+-./:<=>?@^|~]+") s 0 then
     Printf.sprintf "(%s)" s
@@ -147,6 +149,7 @@ let to_result (id, kind) =
   in
     match kind with
 	Searchid.Pvalue ->
+          (* We can apply infix only against the last elem *)
 	  {kind = Value (string_of_value id); id = List.map ~f:infix id'}
       | Searchid.Ptype ->
 	  { t with kind = Type (string_of_type id) }
@@ -161,17 +164,14 @@ let to_result (id, kind) =
       | _ ->
 	  t
 
-let lift f s =
-  s
-  +> sure f
-  +> List.map ~f:to_result
+let raw_search s modules paths =
+  init modules paths; 
+  sure (Searchid.search_string_type ~mode:`Exact) s
+  @ sure (Searchid.search_string_type ~mode:`Included) s
+  @ sure Searchid.search_pattern_symbol s
 
 let search s modules paths =
-  init modules paths; 
-  List.rev @@
-    ExtList.List.unique @@
-    List.rev @@
-    lift (Searchid.search_string_type ~mode:`Exact) s
-  @ lift (Searchid.search_string_type ~mode:`Included) s
-  @ lift Searchid.search_pattern_symbol s
-
+  List.rev 
+  @@ ExtList.List.unique 
+  @@ List.rev_map ~f:to_result 
+  @@ raw_search s modules paths
