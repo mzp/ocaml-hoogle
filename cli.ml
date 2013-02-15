@@ -56,6 +56,7 @@ let analyze_pkind (id, pkind) = match pkind with
 (* module O = Outcometree          --- We cannot do this! Since outcometree is mli only...
 *)
 open Outcometree
+open Types
 
 let format ppf = function
   | `Value (id, (type_, _loc)) ->
@@ -81,7 +82,9 @@ let format ppf = function
             Osig_type (odecl, ors)
         | _ -> assert false
       in
-      !Oprint.out_sig_item ppf o
+      !Oprint.out_sig_item ppf o;
+      if td.type_manifest = None && td.type_kind = Type_abstract then
+        fprintf ppf " (* abstract *)"
   | `Module id ->
       fprintf ppf "module %a" Printtyp.longident id
   | `ModuleType id ->
