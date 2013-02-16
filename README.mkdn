@@ -6,7 +6,7 @@ OVERVIEW
 
 OCaml API search allows you to search many standard O'Caml libraries
 by either function name, or by approximate type signature. It is based
-on O'Caml Browser.
+on OCaml Browser.
 
 It is similar to Hoogle, which is a Haskell API search engine.
 
@@ -23,18 +23,20 @@ PREREQUISITES
 INSTALL
 -------
 
-### 3. Download OCaml API search ###
+### 1. Download OCaml API search ###
 
 * git clone git://github.com/mzp/ocaml-hoogle.git
 
-### 5. Build OCaml API Search ###
+### 2. Build OCaml API Search ###
 
 * cd ocaml-hoogle
 * omake
 
-### 6. How to use ###
+### 3. How to use ###
 
 * run index.cgi as CGI
+* use `ocamlas` from termianl
+
 
 LICENCE
 -------
