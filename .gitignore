@@ -1,12 +1,14 @@
 *~
 .omakedb
 .omakedb.lock
-*.cm[iox]
+*.cm*
 *.omc
 *.cgi
 *.run
+*.opt
 *.annot
 *.o
 *-runner
 config-test.txt
 modules.txt
+

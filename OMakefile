@@ -1,3 +1,5 @@
+.PHONY: clean all
+
 USE_OCAMLFIND = true
 
 OCAMLPACKS[] =
@@ -5,21 +7,21 @@ OCAMLPACKS[] =
     extlib
     CamlGI
     str
-
+    compiler-libs.bytecomp
 if $(not $(OCAMLFIND_EXISTS))
     eprintln('This project requires ocamlfind, but is was not found.')
     eprintln('You need to install ocamlfind and run "omake --configure".')
     exit 1
 
-OCAMLFLAGS    += -dtypes -g -thread
+OCAMLFLAGS    += -dtypes -g -thread -w A-4-9 -warn-error A-4-6-9-27-31-33
 OCAMLINCLUDES += ../parsing
 OCAMLINCLUDES += ../typing
 
-NATIVE_ENABLED = false
+NATIVE_ENABLED = true
 BYTE_ENABLED = true
 
-FILES[] =
-    config
+CGI_FILES[] =
+    chconfig
     controller
     hList
     list2
@@ -28,23 +30,37 @@ FILES[] =
     base
     main
 
-PROGRAM = index.cgi
+CGI_PROGRAM = index.cgi
+
+all:: $(OCamlProgram $(CGI_PROGRAM), $(CGI_FILES)) 
+
+CLI_FILES[] =
+    chconfig
+    controller
+    hList
+    list2
+    searchid
+    search
+    base
+    cli
+
+CLI_PROGRAM = ocamlas
+
+all:: $(OCamlProgram $(CLI_PROGRAM), $(CLI_FILES)) 
 
 # OCAML_LIBS +=
 # OCAML_CLIBS +=
-OCAML_OTHER_LIBS += toplevellib
+# OCAML_OTHER_LIBS += toplevellib
 # OCAML_LIB_FLAGS +=
 #
 
-.PHONY: clean all
-
-all: $(OCamlProgram $(PROGRAM), $(FILES)) modules.txt
+all:: modules.txt
 
 modules.txt : modules-init.sh
 	./modules-init.sh
 
 clean:
-	rm -f *.cm[oix] *.o *.omc  $(PROGRAM) *.run *~ *.annot
+	rm -f *.cm* *.o *.omc  $(CGI_PROGRAM) $(CLI_PROGRAM) *.run *.opt *~ *.annot *Test-runner
 
 .DEFAULT: all
 
@@ -72,8 +88,8 @@ OUNIT_LIBS[] =
 	base
 	hList
 
-OUnitTest(config, config)
-OUnitTest(search, search config searchid list2)
+OUnitTest(config, chconfig)
+OUnitTest(search, search chconfig searchid list2)
 OUnitTest(controller, controller)
 
 ########################################################################

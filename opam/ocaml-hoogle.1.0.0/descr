@@ -1,0 +1,6 @@
+OCaml API Search
+OCaml API search allows you to search many standard O'Caml libraries
+by either function name, or by approximate type signature. It is based
+on O'Caml Browser.
+
+It is similar to Hoogle, which is a Haskell API search engine.

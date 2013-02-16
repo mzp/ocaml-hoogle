@@ -2,6 +2,7 @@
 
 cat <<EOF > modules.txt
 - stdlib
+# Thread realted modules are found in the next PATH spec. The others are found in the default one.
 PATH:: `ocamlfind query threads.posix`
 Pervasives
 Arg

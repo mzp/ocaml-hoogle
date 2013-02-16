@@ -1,0 +1,2 @@
+depends: [ "ocamlfind" "omake" "ounit" "CamlGI" "extlib"]
+ocaml-version: [= "4.00.1"]

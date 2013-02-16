@@ -9,9 +9,9 @@ type t =
 let find_package module_ configs =
   let config =
     List.find configs
-      ~f:(fun { Config.modules=modules } -> List.mem (List.hd module_) modules)
+      ~f:(fun { Chconfig.modules=modules } -> List.mem (List.hd module_) modules)
   in
-    config.Config.name
+    config.Chconfig.name
 
 let module_ =
   function [] -> [""]
@@ -92,7 +92,7 @@ let pagenation ~offset ~window xs =
 
 let available configs =
   Table begin
-    List.map configs ~f:begin fun { Config.name = name; modules = modules} ->
+    List.map configs ~f:begin fun { Chconfig.name = name; modules = modules} ->
       ["package", String name;
        "modules", Table begin
 	 List.map modules ~f:begin fun s ->

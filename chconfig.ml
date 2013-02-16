@@ -32,7 +32,7 @@ let r_path =
   regexp "^PATH *:: *\\(.*\\)$"
 
 let parse_line s =
-  if s = "" then
+  if s = "" || s.[0] = '#' then
     ()
   else if string_match r_path s 0 then
     path := Some (matched_group 1 s)

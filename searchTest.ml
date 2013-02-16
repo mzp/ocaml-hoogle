@@ -23,8 +23,9 @@ let _ = begin "search.ml" >::: [
   end;
   "type" >:: begin fun () ->
     ok {id=["String"; "t"]; kind = Type "string"} @@
-      List.nth (search "t" ["String"] []) 1
+      List.nth (search "t" ["String"] []) 0
   end;
+  (* CR jfuruse: We fail here *)
   "module" >:: begin fun () ->
     ok [{id=["String"]; kind = Module}] @@
       search "String" ["String"] []

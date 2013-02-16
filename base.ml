@@ -1,5 +1,5 @@
-let (@@) f g = f g
-let (+>) f g = g f
+external (@@) : ('a -> 'b) -> 'a -> 'b = "%apply"
+external (+>) : 'a -> ('a -> 'b) -> 'b =  "%revapply"
 let ($) f g x = f (g x)
 let (!$) = Lazy.force
 external id : 'a -> 'a = "%identity"
@@ -128,3 +128,17 @@ let open_in_with path f =
 
 let undefined =  Obj.magic 42
 let undef     = undefined
+
+let rec format_list (sep : (unit, Format.formatter, unit) format)  f ppf = function
+  | [] -> ()
+  | [x] -> f ppf x
+  | x::xs -> 
+      Format.fprintf ppf "@[%a@]%t%a" 
+	f x
+	(fun ppf -> Format.fprintf ppf sep)
+	(format_list sep f) xs
+
+let format_ocaml_list f ppf xs =
+  Format.fprintf ppf "[ @[%a@] ]"
+    (format_list ";@ " f) xs
+
