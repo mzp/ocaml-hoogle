@@ -1,6 +1,6 @@
 open Base
 open OUnit
-open Config
+open Chconfig
 
 let _ =
   open_out_with "config-test.txt" begin fun ch ->
@@ -19,7 +19,7 @@ let _ = begin "config.ml" >::: [
       { name = "some package"; modules = ["A"; "B"]; path=Some "/path/to/some"};
       { name = "other package"; modules = ["C"]; path=None};
     ]  @@
-      Config.read "config-test.txt"
+      Chconfig.read "config-test.txt"
   end;
 ] end +> run_test_tt_main
 

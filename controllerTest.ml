@@ -16,8 +16,8 @@ let rec sort xs =
 let ok x y = assert_equal ~printer:(fun xs -> String.concat ~sep:"\n" @@ List.map ~f:Std.dump xs) (sort x) (sort y)
 
 let config = [
-  { Config.name = "some package"; modules = ["A"; "B"] ; path=None};
-  { Config.name = "other package"; modules = ["String"]; path=None}
+  { Chconfig.name = "some package"; modules = ["A"; "B"] ; path=None};
+  { Chconfig.name = "other package"; modules = ["String"]; path=None}
 ]
 
 let _ = begin "controller.ml" >::: [
